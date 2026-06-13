@@ -16,7 +16,7 @@
 
 ### 👥 Integrantes (Grupo 4):
 * **Bryan Law** — 8-1011-2459
-* **Evaristo Alvarez** — 8-1005-1928
+* **Evaristo Alvarez** — 8-1011-177
 * **Fernando Jimenez** — 20-24-7669
 * **Manuel Campos** — 8-1022-1118
 * **Diego Gordon** — 8-1017-349
@@ -27,7 +27,7 @@
 
 Este proyecto consiste en el desarrollo de un **Pipeline de Datos Inteligente**, un **Modelo de Aprendizaje Automático (Machine Learning)** y un **Dashboard Interactivo** diseñado para analizar el ecosistema de empleo en tecnologías de la información (IT) en la República de Panamá. 
 
-El sistema realiza web scraping automatizado de portales de empleo, estructura los datos usando un modelo de lenguaje masivo para extraer habilidades y salarios, aplica agrupamiento no supervisado (**K-Means**) para categorizar perfiles profesionales, modela el crecimiento de la demanda tecnológica con **Regresión Lineal** y expone todo a través de una interfaz interactiva de **Streamlit** adaptable a modo oscuro y claro.
+El sistema realiza web scraping automatizado de portales de empleo, estructura los datos usando un modelo de lenguaje masivo (**Google Gemini 2.5 Flash**) para extraer habilidades y salarios, aplica agrupamiento no supervisado (**K-Means**) para categorizar perfiles profesionales, modela el crecimiento de la demanda tecnológica con **Regresión Lineal** y expone todo a través de una interfaz interactiva de **Streamlit** adaptable a modo oscuro y claro.
 
 ---
 
