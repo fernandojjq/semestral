@@ -71,28 +71,45 @@ parcial_n2_grupo4/
 
 *(Nota: Dado que la base de datos `laboral_it.db` y el CSV `vacantes_limpias.csv` ya están pre-poblados y guardados en el repositorio, **no es necesario correr el pipeline de scraping la primera vez**; puedes lanzar el Dashboard de inmediato).*
 
-### Paso 1: Clonar el Repositorio e Ingresar
+### Método 1: Ejecución Rápida en Windows (Recomendado)
+Si estás en Windows, hemos creado un script automatizado que se encarga de todo:
+1. Haz doble clic sobre el archivo [ejecutar_dashboard.bat](file:///d:/Downloads/Gestion%20informacion/ejecutar_dashboard.bat) ubicado en la raíz del proyecto.
+2. El script detectará y activará automáticamente el entorno virtual `.venv` (creándolo e instalando dependencias si no existiera) e iniciará el servidor de Streamlit.
+3. Se abrirá automáticamente la dirección `http://localhost:8501` en tu navegador.
+
+---
+
+### Método 2: Ejecución Manual en Terminal
+
+#### Paso 1: Clonar el Repositorio e Ingresar
 Abre la terminal de tu computadora y ejecuta:
 ```bash
-git clone https://github.com/tu-usuario/analisis-mercado-laboral-it-panama.git
-cd analisis-mercado-laboral-it-panama
+git clone https://github.com/Shazzy004/Parcial2Gestion.git
+cd Parcial2Gestion
 ```
 
-### Paso 2: Crear el Entorno Virtual e Instalar Dependencias
+#### Paso 2: Crear el Entorno Virtual e Instalar Dependencias
 * **En Windows (Símbolo del Sistema / CMD):**
   ```cmd
-  python -m venv venv
-  venv\Scripts\activate
+  python -m venv .venv
+  .venv\Scripts\activate
+  pip install -r requirements.txt
+  ```
+* **En Windows (PowerShell):**
+  ```powershell
+  python -m venv .venv
+  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+  .\.venv\Scripts\Activate.ps1
   pip install -r requirements.txt
   ```
 * **En macOS / Linux (Terminal):**
   ```bash
-  python3 -m venv venv
-  source venv/bin/activate
+  python3 -m venv .venv
+  source .venv/bin/activate
   pip install -r requirements.txt
   ```
 
-### Paso 3: Lanzar el Dashboard de Streamlit
+#### Paso 3: Lanzar el Dashboard de Streamlit
 Ejecuta el servidor web local:
 ```bash
 streamlit run src/app.py

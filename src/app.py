@@ -729,8 +729,8 @@ with tab_ia:
                        - Diego Gordon
                     """
                     
-                    # Probar múltiples modelos de la generación activa en 2026, priorizando la familia Gemini 3
-                    modelos_a_probar = ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-3-flash", "gemini-2.5-flash"]
+                    # Probar múltiples modelos por compatibilidad en la nube de Google
+                    modelos_a_probar = ["gemini-3.1-flash-lite", "gemini-2.5-flash-lite", "gemini-3.5-flash", "gemini-3-flash", "gemini-2.5-flash"]
                     response = None
                     last_err = None
                     
