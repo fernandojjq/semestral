@@ -398,7 +398,8 @@ def extract_info_with_gemini(titulo: str, descripcion: str) -> VacanteProcesada:
             import json
 
             genai.configure(api_key=gemini_key)
-            modelos_a_probar = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-2.0-flash-lite-001"]
+            # Probar múltiples modelos de la generación activa en 2026, priorizando la familia Gemini 3
+            modelos_a_probar = ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-3-flash", "gemini-2.5-flash"]
             response = None
             last_err = None
 

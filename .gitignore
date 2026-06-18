@@ -21,3 +21,6 @@ data/raw/*.html
 Thumbs.db
 .vscode/
 .idea/
+
+# Guia de estudio local
+Explicacion_Detallada_Proyecto.md
