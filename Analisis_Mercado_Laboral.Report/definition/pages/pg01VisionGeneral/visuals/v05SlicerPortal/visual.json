@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "v05SlicerPortal",
+  "position": {
+    "x": 30,
+    "y": 190,
+    "z": 500,
+    "width": 220,
+    "height": 230,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Portales"
+                    }
+                  },
+                  "Property": "Nombre_Portal"
+                }
+              },
+              "queryRef": "Dim_Portales.Nombre_Portal",
+              "nativeQueryRef": "Nombre_Portal"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

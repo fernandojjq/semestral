@@ -400,7 +400,7 @@ if "es_simulado" in df_jobs.columns:
     else:
         st.warning(f"🟡 **Origen de datos:** {n_sim} registros simulados (no se obtuvieron datos reales en esta corrida).")
 
-# Fila 1: Tarjetas de Métricas Clave
+# Fila 1: Tarjetas de Métricas Clave (Mercado Base)
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
@@ -447,15 +447,58 @@ with col4:
         </div>
     """, unsafe_allow_html=True)
 
+# Fila 2: Tarjetas de Métricas Avanzadas
+col5, col6, col7, col8 = st.columns(4)
+
+with col5:
+    exp_promedio = df_filtrado["experiencia_anios"].mean() if len(df_filtrado) > 0 else 0
+    st.markdown(f"""
+        <div class="metric-card card-blue">
+            <div class="metric-title">Experiencia Promedio</div>
+            <div class="metric-value">{exp_promedio:.1f} años</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+with col6:
+    brecha_salarial = ((sal_promedio_max - sal_promedio_min) / sal_promedio_min * 100) if sal_promedio_min > 0 else 0
+    st.markdown(f"""
+        <div class="metric-card card-green">
+            <div class="metric-title">Brecha Salarial Máx-Mín</div>
+            <div class="metric-value">{brecha_salarial:.1f}%</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+with col7:
+    sal_promedio_medio = (sal_promedio_min + sal_promedio_max) / 2
+    rel_valor_exp = (sal_promedio_medio / exp_promedio) if exp_promedio > 0 else 0
+    st.markdown(f"""
+        <div class="metric-card card-amber">
+            <div class="metric-title">Valor / Año Experiencia</div>
+            <div class="metric-value">B/. {rel_valor_exp:,.2f}</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+with col8:
+    n_remoto = len(df_filtrado[df_filtrado["portal"].isin(["Arbeitnow", "RemoteOK"])])
+    pct_remoto = (n_remoto / len(df_filtrado) * 100) if len(df_filtrado) > 0 else 0
+    st.markdown(f"""
+        <div class="metric-card card-purple">
+            <div class="metric-title">Empleo Remoto / Int.</div>
+            <div class="metric-value">{pct_remoto:.1f}%</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+
 
 # =====================================================================
 # Estructura de Pestañas (Tabs)
 # =====================================================================
-tab_mercado, tab_clusters, tab_emergentes, tab_ia = st.tabs([
+tab_mercado, tab_clusters, tab_emergentes, tab_ia, tab_chat = st.tabs([
     "📊 Visión General del Mercado",
     "🤖 Clustering de Perfiles (ML)",
     "📈 Habilidades Emergentes (Tendencias)",
-    "💡 Conclusiones con IA"
+    "💡 Conclusiones con IA",
+    "💬 Chat de Consultas (IA)"
 ])
 
 # ---------------------------------------------------------------------
@@ -793,3 +836,186 @@ with tab_ia:
             </p>
         </div>
         """, unsafe_allow_html=True)
+
+
+# ---------------------------------------------------------------------
+# Pestaña 5: Chat de Consultas (IA + SQL)
+# ---------------------------------------------------------------------
+with tab_chat:
+    st.subheader("💬 Consulta la Base de Datos en Lenguaje Natural")
+    st.markdown("""
+        Esta sección te permite hacer preguntas directas sobre el mercado laboral IT en Panamá (ej. *'¿Cuáles son las 5 habilidades mejor pagadas en promedio?'* o *'¿Cuántas vacantes piden Python en Panamá?'*).
+        
+        La IA (Gemini) interpretará tu pregunta, generará la consulta SQL correspondiente, la ejecutará sobre la base de datos local SQLite y te presentará los resultados junto con una explicación detallada.
+    """)
+
+    db_path = os.path.join(DATA_PROC_DIR, "laboral_it.db")
+    
+    # Inicializar el estado de mensajes del chat
+    if "chat_history" not in st.session_state:
+        st.session_state["chat_history"] = []
+
+    # Mostrar historial de mensajes
+    for msg in st.session_state["chat_history"]:
+        with st.chat_message(msg["role"]):
+            st.write(msg["content"])
+            if "df_result" in msg and msg["df_result"] is not None:
+                st.dataframe(msg["df_result"])
+            if "sql_query" in msg and msg["sql_query"]:
+                with st.expander("Ver consulta SQL generada"):
+                    st.code(msg["sql_query"], language="sql")
+
+    # Entrada de pregunta
+    pregunta = st.chat_input("Escribe tu pregunta sobre las vacantes aquí...")
+
+    if pregunta:
+        # Mostrar la pregunta inmediatamente en pantalla
+        st.session_state["chat_history"].append({"role": "user", "content": pregunta})
+        # Forzar recarga para que se dibuje el mensaje del usuario antes de que responda la IA
+        st.rerun()
+
+    # Si hay una pregunta recién ingresada que no tiene respuesta de la IA
+    if st.session_state["chat_history"] and st.session_state["chat_history"][-1]["role"] == "user":
+        pregunta_pendiente = st.session_state["chat_history"][-1]["content"]
+        
+        with st.chat_message("assistant"):
+            if not gemini_key:
+                st.error("🔑 No se encontró la API Key de Gemini (`GEMINI_API_KEY`) en el entorno o archivo `.env`. Esta funcionalidad requiere la clave de API activa.")
+            else:
+                with st.spinner("Generando consulta SQL..."):
+                    try:
+                        import google.generativeai as genai
+                        import sqlite3
+                        import re
+                        
+                        genai.configure(api_key=gemini_key)
+                        
+                        # Prompt 1: Pregunta -> SQL
+                        prompt_sql = f"""
+                        Eres un experto en bases de datos SQLite y analista de datos. Tu tarea es generar una consulta SQL limpia y válida que responda a la pregunta del usuario sobre las vacantes de empleo tecnológico.
+                        
+                        El esquema de la base de datos SQLite contiene las siguientes tablas y columnas:
+                        
+                        1. Tabla 'vacantes':
+                           - id (INTEGER, Primary Key)
+                           - titulo_original (TEXT)
+                           - puesto (TEXT) - Puesto de trabajo limpio
+                           - empresa (TEXT)
+                           - portal (TEXT)
+                           - fecha_publicacion (DATE)
+                           - salario_min (REAL)
+                           - salario_max (REAL)
+                           - experiencia_anios (INTEGER)
+                           - categoria_rol (TEXT)
+                           - descripcion (TEXT)
+                           - es_simulado (INTEGER) - 0 para vacantes reales de scraping/API, 1 para simuladas
+                        
+                        2. Tabla 'habilidades':
+                           - id (INTEGER, Primary Key)
+                           - nombre (TEXT) - Nombre de la tecnología o habilidad
+                        
+                        3. Tabla 'vacante_habilidad' (Tabla intermedia Many-to-Many):
+                           - vacante_id (INTEGER, Foreign Key a vacantes.id)
+                           - habilidad_id (INTEGER, Foreign Key a habilidades.id)
+                        
+                        Reglas estrictas para la consulta SQL:
+                        1. Genera únicamente una consulta SELECT. No modifiques la base de datos.
+                        2. Si el usuario te pregunta por salarios, usa la columna 'salario_max' o 'salario_min'. Si están en 0 o nulos, ignóralos ('WHERE salario_max > 0').
+                        3. Para filtrar habilidades, haz un JOIN entre 'vacantes', 'vacante_habilidad' y 'habilidades'.
+                        4. Para búsquedas parciales de texto, usa 'LIKE %texto%'.
+                        5. Limita los resultados a un número razonable (ej. 'LIMIT 10' o 'LIMIT 20') a menos que se pidan totales.
+                        6. Devuelve EXCLUSIVAMENTE el código SQL dentro de un bloque markdown ```sql ... ```. No escribas texto explicativo antes ni después de la consulta.
+                        
+                        Pregunta del usuario: "{pregunta_pendiente}"
+                        """
+                        
+                        modelos_a_probar = ["gemini-3.1-flash-lite", "gemini-2.5-flash-lite", "gemini-3.5-flash", "gemini-3-flash", "gemini-2.5-flash"]
+                        sql_code = ""
+                        last_err = None
+                        
+                        for m_name in modelos_a_probar:
+                            try:
+                                model = genai.GenerativeModel(m_name)
+                                response = model.generate_content(prompt_sql)
+                                if response and response.text:
+                                    sql_code = response.text
+                                    break
+                            except Exception as e:
+                                last_err = e
+                                continue
+                        
+                        if not sql_code:
+                            raise last_err
+                            
+                        # Limpiar y extraer la consulta SQL del bloque markdown
+                        sql_match = re.search(r"```sql(.*?)```", sql_code, re.DOTALL)
+                        if sql_match:
+                            query = sql_match.group(1).strip()
+                        else:
+                            query = sql_code.strip()
+                            # Eliminar cualquier prefijo ```sql si quedó suelto
+                            query = re.sub(r"^```sql", "", query, flags=re.IGNORECASE)
+                            query = re.sub(r"```$", "", query).strip()
+                        
+                        # Validación de seguridad básica
+                        if not query.upper().strip().startswith("SELECT"):
+                            raise ValueError("Por razones de seguridad, solo se permiten consultas SELECT.")
+                            
+                        with st.spinner("Ejecutando consulta sobre SQLite..."):
+                            # Conectar a SQLite y ejecutar la consulta
+                            conn = sqlite3.connect(db_path)
+                            df_res = pd.read_sql_query(query, conn)
+                            conn.close()
+                        
+                        with st.spinner("Redactando respuesta explicativa..."):
+                            # Prompt 2: SQL + Resultados -> Explicación en lenguaje natural
+                            prompt_explicacion = f"""
+                            Eres un analista de datos experto del mercado laboral IT en Panamá. Tu objetivo es explicar los resultados de una consulta SQL de forma clara, amigable y profesional a un estudiante o directivo de la Universidad Tecnológica de Panamá.
+                            
+                            Pregunta original: "{pregunta_pendiente}"
+                            Consulta SQL ejecutada:
+                            ```sql
+                            {query}
+                            ```
+                            
+                            Resultados de la consulta (primeras 20 filas):
+                            {df_res.head(20).to_string()}
+                            
+                            Redacta una respuesta concisa pero completa que resuma y analice estos resultados en el contexto de Panamá. Si la consulta no arrojó resultados, explícalo de forma amable sugiriendo otras formas de buscar.
+                            """
+                            
+                            respuesta_ia = ""
+                            for m_name in modelos_a_probar:
+                                try:
+                                    model = genai.GenerativeModel(m_name)
+                                    response_explain = model.generate_content(prompt_explicacion)
+                                    if response_explain and response_explain.text:
+                                        respuesta_ia = response_explain.text
+                                        break
+                                except Exception as e:
+                                    last_err = e
+                                    continue
+                                    
+                            if not respuesta_ia:
+                                raise last_err
+                        
+                        # Mostrar el resultado en el chat
+                        st.write(respuesta_ia)
+                        st.dataframe(df_res)
+                        with st.expander("Ver consulta SQL generada"):
+                            st.code(query, language="sql")
+                            
+                        # Guardar la respuesta del asistente en el historial
+                        st.session_state["chat_history"].append({
+                            "role": "assistant",
+                            "content": respuesta_ia,
+                            "df_result": df_res,
+                            "sql_query": query
+                        })
+                        st.rerun()
+                        
+                    except Exception as ex:
+                        st.error(f"Error al procesar la consulta: {ex}")
+                        # Eliminar la última pregunta fallida para evitar bucles infinitos
+                        st.session_state["chat_history"].pop()
+

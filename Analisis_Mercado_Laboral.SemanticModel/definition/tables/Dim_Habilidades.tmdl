@@ -1,0 +1,34 @@
+table Dim_Habilidades
+	lineageTag: 651ed65a-54c8-45a0-b873-de44c19f81d4
+
+	column ID_Habilidad
+		dataType: int64
+		formatString: 0
+		lineageTag: 491171e0-82de-4d8a-8519-59a493535961
+		summarizeBy: none
+		sourceColumn: ID_Habilidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nombre_Habilidad
+		dataType: string
+		lineageTag: 9f174f86-833b-4854-ac74-8f7bc176a223
+		summarizeBy: none
+		sourceColumn: Nombre_Habilidad
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Habilidades = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("D:\Downloads\Gestion informacion\data\processed\modelo_estrella\Dim_Habilidades.csv"),[Delimiter=",", Columns=2, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Habilidad", Int64.Type}, {"Nombre_Habilidad", type text}})
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

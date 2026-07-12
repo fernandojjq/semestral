@@ -1,0 +1,76 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "v02KpiSalarioMedio",
+  "position": {
+    "x": 330,
+    "y": 40,
+    "z": 1001,
+    "width": 280,
+    "height": 130,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "objects": {
+      "cards": [
+        {
+          "properties": {
+            "showLabel": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "value": [
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            },
+            "labelPrecision": {
+              "expr": {
+                "Literal": {
+                  "Value": "2L"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Medidas.Salario Medio Promedio"
+          }
+        }
+      ]
+    },
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas"
+                    }
+                  },
+                  "Property": "Salario Medio Promedio"
+                }
+              },
+              "queryRef": "Medidas.Salario Medio Promedio",
+              "nativeQueryRef": "Salario Medio Promedio"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

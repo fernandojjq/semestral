@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "v04SlicerMes",
+  "position": {
+    "x": 930,
+    "y": 40,
+    "z": 1003,
+    "width": 280,
+    "height": 130,
+    "tabOrder": 3
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Fecha"
+                    }
+                  },
+                  "Property": "Mes_Nombre"
+                }
+              },
+              "queryRef": "Dim_Fecha.Mes_Nombre",
+              "nativeQueryRef": "Mes_Nombre"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

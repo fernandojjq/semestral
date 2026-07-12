@@ -1,0 +1,129 @@
+﻿ID_Puesto,Nombre_Puesto,categoria_rol
+1,Perforador Horizontal dirigido,Soporte & IT
+2,Operador de Excavadora,Soporte & IT
+3,Gerente de Producto,Gestión & Agile
+4,Docente de Tecnología,Soporte & IT
+5,Asesor de Soporte Técnico,Soporte & IT
+6,Técnico de Mantenimiento Preventivo,Soporte & IT
+7,Técnico en Refrigeración,Soporte & IT
+8,Analista de Soporte Técnico y Reportería,Soporte & IT
+9,Técnico en refrigeración e instalador,Soporte & IT
+10,Agente de servicio técnico,Soporte & IT
+11,Técnico de Refrigeración,Soporte & IT
+12,Técnico de Mantenimiento,Soporte & IT
+13,Técnico de Limpieza Especializada,Soporte & IT
+14,Operador PHD,Soporte & IT
+15,Operador técnico,Soporte & IT
+16,Machine Learning Engineer,Data & Analytics
+17,TouchDesigner Developer,Frontend
+18,Cloud Engineer,DevOps & Cloud
+19,Werkstudent:in in der Softwareentwicklung,DevOps & Cloud
+20,"Senior Software Engineer, Core Experiences",Backend
+21,Product Marketing Manager,Gestión & Agile
+22,Software Engineer (Fullstack),Fullstack
+23,Working Student Finance Data & Analytics,Data & Analytics
+24,Full Stack Engineer,Fullstack
+25,Trainee IT-Projektmanagement,Gestión & Agile
+26,Senior Python Entwickler,Backend
+27,Python-Entwickler (ML/Data),Data & Analytics
+28,Senior AI Engineer,Data & Analytics
+29,Senior Data Engineer,Data & Analytics
+30,Agentic AI Engineer,Data & Analytics
+31,Leiter Softwareentwicklung,Gestión & Agile
+32,"Software Engineer, Data Infrastructure & Acquisition",Data & Analytics
+33,"Senior Software Engineer, Windows/Desktop Applications",Frontend
+34,"Software Engineer, Platform",Backend
+35,Werkstudent Software Testing / Qualitätssicherung,Soporte & IT
+36,AI Integration Engineer,Data & Analytics
+37,Agentic AI for Science Developer,Data & Analytics
+38,Software Engineer (Frontend) - Intern,Frontend
+39,Senior Full-Stack Engineer,Fullstack
+40,E-Commerce Shopware Developer,Backend
+41,Software Entwickler,Backend
+42,Senior Full Stack Software Engineer,Fullstack
+43,Head of Software Engineering,Gestión & Agile
+44,Quality Engineer Produktentwicklung Automotive,Gestión & Agile
+45,Founding AI Engineer,Data & Analytics
+46,Senior Consultant Software Asset Management & Microsoft Lizenzberatung,Gestión & Agile
+47,Senior Engineering Manager,Gestión & Agile
+48,AWS Cloud Data Engineer,DevOps & Cloud
+49,Softwareentwickler (m/w/d) - Minijob / Studenten,Backend
+50,Praxissemester Softwareentwicklung,Backend
+51,Fullstack Entwickler,Fullstack
+52,Senior Cloud / IAM Consultant (AWS),DevOps & Cloud
+53,Senior Cloud / DevOps Engineer (AWS),DevOps & Cloud
+54,Senior Fullstack Entwickler,Fullstack
+55,Golang Developer,Backend
+56,Werkstudent in der Softwareentwicklung,Backend
+57,System Test Engineer - SigInt Products,Soporte & IT
+58,Freelance Software Engineer,Fullstack
+59,AI Platform Engineer,DevOps & Cloud
+60,Senior AI Platform Engineer,DevOps & Cloud
+61,Senior QA Engineer,Soporte & IT
+62,Softwareentwickler Embedded C++,Backend
+63,Business Development & Partnerships Partner,Data & Analytics
+64,Engineering Lead,Gestión & Agile
+65,Sales Trainee - B2B Software,Gestión & Agile
+66,Senior Backend Engineer,Backend
+67,Front-End Software Engineer Flutter,Mobile
+68,Product Engineer,Fullstack
+69,Mechanical Design Engineer,Gestión & Agile
+70,Test Engineer Communication Management,Soporte & IT
+71,Business Analyst - Bankbilanzierung & Jahresabschluss,Gestión & Agile
+72,AI Full Stack Software Engineer,Fullstack
+73,Data Management Coordinator,Data & Analytics
+74,Junior Cloud Systems Administrator,DevOps & Cloud
+75,Fullstack Developer,Fullstack
+76,Junior Backend-focused Developer,Backend
+77,Senior DevOps Engineer,DevOps & Cloud
+78,Junior Business Analyst – KI/AI Champion,Data & Analytics
+79,Working Student: AI Product Engineering - Data,Data & Analytics
+80,Senior Backend Entwickler,Backend
+81,Embedded Firmware Engineer,Backend
+82,Softwareentwickler C++ / Qt,Backend
+83,System Engineer Requirements & Systemarchitektur,Soporte & IT
+84,Financial Analyst Corporate Finance,Data & Analytics
+85,Senior IT Infrastructure & Network Engineer,Soporte & IT
+86,Senior Analytics Engineer,Data & Analytics
+87,SAP ABAP Software Engineer,Backend
+88,Junior DevOps Engineer,DevOps & Cloud
+89,Senior Platform Engineer,DevOps & Cloud
+90,Technischer Werkstudent,Fullstack
+91,Backend Developer,Backend
+92,Frontend Developer,Frontend
+93,Strategic Partnerships & Business Development Manager,Data & Analytics
+94,Senior CRM Manager Data & Automation,Data & Analytics
+95,Product Engineer / Fullstack Developer,Fullstack
+96,DevOps Entwickler,DevOps & Cloud
+97,Senior Formal Verification Engineer,DevOps & Cloud
+98,System Verifikation Engineer KMS,Soporte & IT
+99,Senior Machine Learning Engineer,Data & Analytics
+100,Senior Camera System Design Engineer,Gestión & Agile
+101,Application Support & Software Tester,Soporte & IT
+102,Fullstack Softwareentwickler,Fullstack
+103,Frontend Softwareentwickler,Frontend
+104,"Engineering Manager, Core Domain",Gestión & Agile
+105,Embedded Software Developer,Backend
+106,DevOps Engineer,DevOps & Cloud
+107,Scrum Master,Gestión & Agile
+108,Java Engineer,Backend
+109,Data Scientist,Data & Analytics
+110,Soporte Técnico IT,Soporte & IT
+111,Ingeniero de Soporte,Soporte & IT
+112,Cloud Infrastructure Specialist,DevOps & Cloud
+113,BI Engineer,Data & Analytics
+114,Python Developer,Backend
+115,.NET Consultant,Backend
+116,Fullstack Engineer,Fullstack
+117,iOS App Developer,Mobile
+118,IT Project Manager,Gestión & Agile
+119,Analista de Datos,Data & Analytics
+120,Mobile Developer,Mobile
+121,Administrador de Sistemas,Soporte & IT
+122,UI Developer,Frontend
+123,Desarrollador Web Fullstack,Fullstack
+124,Administrador Cloud,DevOps & Cloud
+125,React Developer,Frontend
+126,Product Owner,Gestión & Agile
+127,Data Analyst,Data & Analytics
+128,Android Developer,Mobile

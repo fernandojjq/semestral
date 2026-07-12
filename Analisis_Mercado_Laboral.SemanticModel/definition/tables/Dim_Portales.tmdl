@@ -1,0 +1,34 @@
+table Dim_Portales
+	lineageTag: 3aa70af9-0494-459f-b0ab-274396c19812
+
+	column ID_Portal
+		dataType: int64
+		formatString: 0
+		lineageTag: 04e0b160-445e-4dac-a23b-0178f0fcd9b1
+		summarizeBy: none
+		sourceColumn: ID_Portal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nombre_Portal
+		dataType: string
+		lineageTag: ded71fb9-4fa5-4153-bdeb-dbddb879b4a6
+		summarizeBy: none
+		sourceColumn: Nombre_Portal
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Portales = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("D:\Downloads\Gestion informacion\data\processed\modelo_estrella\Dim_Portales.csv"),[Delimiter=",", Columns=2, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Portal", Int64.Type}, {"Nombre_Portal", type text}})
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

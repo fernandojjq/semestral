@@ -1,0 +1,110 @@
+table Dim_Fecha
+	lineageTag: 3f60cbbd-db54-4d57-9282-d9b603f14790
+
+	column ID_Fecha
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 22d824c5-1602-4dbe-8109-e2335b7a27c7
+		summarizeBy: none
+		sourceColumn: ID_Fecha
+
+		variation Variación
+			isDefault
+			relationship: 9ccf369e-232f-4280-9a2a-53d3f4290a04
+			defaultHierarchy: LocalDateTable_bde6647c-e106-4685-bc96-466342e08f23.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Fecha
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 034ee83a-4761-4dd5-9791-4454f2b9095b
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		variation Variación
+			isDefault
+			relationship: ad27e57d-b12a-493c-b40a-6095e0ab55d7
+			defaultHierarchy: LocalDateTable_c9ea6214-5d24-4355-9d39-0184c25ac9f0.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Anio
+		dataType: int64
+		formatString: 0
+		lineageTag: 2503579f-69d4-4fcb-820e-236412026f54
+		summarizeBy: sum
+		sourceColumn: Anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: 569faa61-2e6d-4054-acd8-e5d88a7b9d9f
+		summarizeBy: sum
+		sourceColumn: Trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes
+		dataType: int64
+		formatString: 0
+		lineageTag: e63f5102-e0ff-41a2-91ff-4e5dc7585700
+		summarizeBy: sum
+		sourceColumn: Mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes_Nombre
+		dataType: string
+		lineageTag: 6a6196d5-6c4f-47d5-9667-153f7ac647da
+		summarizeBy: none
+		sourceColumn: Mes_Nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Semana
+		dataType: int64
+		formatString: 0
+		lineageTag: 70369af3-905e-47e4-88c9-4f047f8fc4b7
+		summarizeBy: sum
+		sourceColumn: Semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dia
+		dataType: int64
+		formatString: 0
+		lineageTag: ff3006c2-b71b-4f14-919b-90bdcd256ff8
+		summarizeBy: sum
+		sourceColumn: Dia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dia_Semana_Nombre
+		dataType: string
+		lineageTag: 45a6dd1c-eccf-4119-ace7-0650772839c7
+		summarizeBy: none
+		sourceColumn: Dia_Semana_Nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Fecha = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("D:\Downloads\Gestion informacion\data\processed\modelo_estrella\Dim_Fecha.csv"),[Delimiter=",", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Fecha", type date}, {"Fecha", type date}, {"Anio", Int64.Type}, {"Trimestre", Int64.Type}, {"Mes", Int64.Type}, {"Mes_Nombre", type text}, {"Semana", Int64.Type}, {"Dia", Int64.Type}, {"Dia_Semana_Nombre", type text}})
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

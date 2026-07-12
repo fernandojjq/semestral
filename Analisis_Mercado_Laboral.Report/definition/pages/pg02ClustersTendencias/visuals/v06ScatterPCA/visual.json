@@ -1,0 +1,102 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "v06ScatterPCA",
+  "position": {
+    "x": 420,
+    "y": 190,
+    "z": 2001,
+    "width": 440,
+    "height": 480,
+    "tabOrder": 5
+  },
+  "visual": {
+    "visualType": "scatterChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Puestos"
+                    }
+                  },
+                  "Property": "Nombre_Puesto"
+                }
+              },
+              "queryRef": "Dim_Puestos.Nombre_Puesto",
+              "nativeQueryRef": "Nombre_Puesto"
+            }
+          ]
+        },
+        "X": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Fact_Vacantes"
+                        }
+                      },
+                      "Property": "PCA_X"
+                    }
+                  },
+                  "Function": 1
+                }
+              },
+              "queryRef": "Avg(Fact_Vacantes.PCA_X)",
+              "nativeQueryRef": "Avg of PCA_X"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Fact_Vacantes"
+                        }
+                      },
+                      "Property": "PCA_Y"
+                    }
+                  },
+                  "Function": 1
+                }
+              },
+              "queryRef": "Avg(Fact_Vacantes.PCA_Y)",
+              "nativeQueryRef": "Avg of PCA_Y"
+            }
+          ]
+        },
+        "Series": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Clusters"
+                    }
+                  },
+                  "Property": "Nombre_Cluster"
+                }
+              },
+              "queryRef": "Dim_Clusters.Nombre_Cluster",
+              "nativeQueryRef": "Nombre_Cluster"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
