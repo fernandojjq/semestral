@@ -34,6 +34,7 @@ relationship AutoDetected_513cc50e-e7f1-4635-b130-b6e09a65aa1d
 	toColumn: Dim_Puestos.ID_Puesto
 
 relationship AutoDetected_22a59a5a-151b-4ecc-859f-73bf5ad2d654
+	crossFilteringBehavior: bothDirections
 	fromColumn: Fact_Vacante_Habilidad.ID_Vacante
 	toColumn: Fact_Vacantes.ID_Vacante
 
