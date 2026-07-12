@@ -32,9 +32,11 @@ table Dim_Puestos
 				let
 				    Origen = Csv.Document(File.Contents("D:\Downloads\Gestion informacion\data\processed\modelo_estrella\Dim_Puestos.csv"),[Delimiter=",", Columns=3, Encoding=65001, QuoteStyle=QuoteStyle.None]),
 				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
-				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Puesto", Int64.Type}, {"Nombre_Puesto", type text}, {"categoria_rol", type text}})
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Puesto", Int64.Type}, {"Nombre_Puesto", type text}, {"categoria_rol", type text}}),
+				    #"Limpiar Texto Categoria" = Table.TransformColumns(#"Tipo cambiado",{{"categoria_rol", Text.Trim, type text}}),
+				    #"Categoria en Mayusculas" = Table.TransformColumns(#"Limpiar Texto Categoria",{{"categoria_rol", Text.Upper, type text}})
 				in
-				    #"Tipo cambiado"
+				    #"Categoria en Mayusculas"
 
 	annotation PBI_NavigationStepName = Navegación
 
