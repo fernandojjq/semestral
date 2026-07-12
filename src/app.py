@@ -306,7 +306,7 @@ max_sal = float(df_jobs["salario_max"].max())
 salario_range = st.sidebar.slider(
     "Rango Salarial Mensual (USD $)",
     min_value=500.0,
-    max_value=6000.0,
+    max_value=10000.0,
     value=(1000.0, 4500.0),
     step=100.0
 )
