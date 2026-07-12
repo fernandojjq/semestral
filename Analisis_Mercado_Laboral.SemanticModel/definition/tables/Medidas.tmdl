@@ -17,6 +17,15 @@ table Medidas
 		formatString: "B/." #,##0
 		lineageTag: 6131bf35-44c1-41ed-abb1-ac9fb9173957
 
+	measure 'Salario Mínimo Texto' = FORMAT([Salario Mínimo Promedio], """B/. """ & "#,##0")
+		lineageTag: d4888448-0044-4050-a881-4033cb90f26e
+
+	measure 'Salario Máximo Texto' = FORMAT([Salario Máximo Promedio], """B/. """ & "#,##0")
+		lineageTag: d4fcb42-7ded-4264-b995-9c16204eb7c0
+
+	measure 'Salario Medio Texto' = FORMAT([Salario Medio Promedio], """B/. """ & "#,##0")
+		lineageTag: d131bf35-44c1-41ed-abb1-ac9fb9173958
+
 	measure 'Experiencia Promedio Requerida' = AVERAGE(Fact_Vacantes[Experiencia_Anios])
 		formatString: 0.0
 		lineageTag: a43361e1-aafd-429c-bcea-9e8b98437d4b
