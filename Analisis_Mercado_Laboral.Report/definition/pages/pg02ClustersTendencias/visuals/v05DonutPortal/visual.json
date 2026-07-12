@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
   "name": "v05DonutPortal",
   "position": {
     "x": 30,
     "y": 190,
     "z": 2000,
-    "width": 380,
     "height": 480,
+    "width": 380,
     "tabOrder": 4
   },
   "visual": {
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "Dim_Portales.Nombre_Portal",
-              "nativeQueryRef": "Nombre_Portal"
+              "nativeQueryRef": "Nombre_Portal",
+              "active": true
             }
           ]
         },

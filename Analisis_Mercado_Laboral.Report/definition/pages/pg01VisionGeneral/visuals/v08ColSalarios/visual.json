@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
   "name": "v08ColSalarios",
   "position": {
     "x": 770,
     "y": 190,
     "z": 2001,
-    "width": 480,
     "height": 480,
+    "width": 480,
     "tabOrder": 7
   },
   "visual": {
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "Dim_Puestos.categoria_rol",
-              "nativeQueryRef": "categoria_rol"
+              "nativeQueryRef": "categoria_rol",
+              "active": true
             }
           ]
         },
@@ -41,11 +42,11 @@
                       "Entity": "Medidas"
                     }
                   },
-                  "Property": "Salario M\u00ednimo Promedio"
+                  "Property": "Salario Mínimo Promedio"
                 }
               },
-              "queryRef": "Medidas.Salario M\u00ednimo Promedio",
-              "nativeQueryRef": "Salario M\u00ednimo Promedio"
+              "queryRef": "Medidas.Salario Mínimo Promedio",
+              "nativeQueryRef": "Salario Mínimo Promedio"
             },
             {
               "field": {
@@ -55,11 +56,11 @@
                       "Entity": "Medidas"
                     }
                   },
-                  "Property": "Salario M\u00e1ximo Promedio"
+                  "Property": "Salario Máximo Promedio"
                 }
               },
-              "queryRef": "Medidas.Salario M\u00e1ximo Promedio",
-              "nativeQueryRef": "Salario M\u00e1ximo Promedio"
+              "queryRef": "Medidas.Salario Máximo Promedio",
+              "nativeQueryRef": "Salario Máximo Promedio"
             }
           ]
         }

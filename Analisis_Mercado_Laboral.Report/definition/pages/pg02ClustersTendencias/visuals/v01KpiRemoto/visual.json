@@ -1,30 +1,39 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
   "name": "v01KpiRemoto",
   "position": {
     "x": 30,
     "y": 40,
     "z": 1000,
-    "width": 280,
     "height": 130,
+    "width": 280,
     "tabOrder": 0
   },
   "visual": {
     "visualType": "cardVisual",
-    "objects": {
-      "cards": [
-        {
-          "properties": {
-            "showLabel": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas"
+                    }
+                  },
+                  "Property": "Porcentaje Remoto/Internacional"
                 }
-              }
+              },
+              "queryRef": "Medidas.Porcentaje Remoto/Internacional",
+              "nativeQueryRef": "Porcentaje Remoto/Internacional"
             }
-          }
+          ]
         }
-      ],
+      }
+    },
+    "objects": {
       "value": [
         {
           "properties": {
@@ -48,28 +57,6 @@
           }
         }
       ]
-    },
-    "query": {
-      "queryState": {
-        "Data": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Medidas"
-                    }
-                  },
-                  "Property": "Porcentaje Remoto/Internacional"
-                }
-              },
-              "queryRef": "Medidas.Porcentaje Remoto/Internacional",
-              "nativeQueryRef": "Porcentaje Remoto/Internacional"
-            }
-          ]
-        }
-      }
     },
     "drillFilterOtherVisuals": true
   }

@@ -24,7 +24,6 @@ ref table Dim_Puestos
 ref table Fact_Vacante_Habilidad
 ref table Fact_Vacantes
 ref table LocalDateTable_27b4f582-1d40-45e5-ae8b-7566eff08342
-
 ref table Medidas
 
 ref cultureInfo es-MX

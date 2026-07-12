@@ -37,7 +37,7 @@ relationship AutoDetected_22a59a5a-151b-4ecc-859f-73bf5ad2d654
 	fromColumn: Fact_Vacante_Habilidad.ID_Vacante
 	toColumn: Fact_Vacantes.ID_Vacante
 
-
 relationship 3334619c-1b86-46af-903f-c87e30a43fa5
 	fromColumn: Fact_Vacantes.ID_Fecha
 	toColumn: Dim_Fecha.ID_Fecha
+

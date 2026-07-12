@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
   "name": "v06SlicerCategoria",
   "position": {
     "x": 30,
     "y": 440,
     "z": 501,
-    "width": 220,
     "height": 230,
+    "width": 220,
     "tabOrder": 5
   },
   "visual": {
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "Dim_Puestos.categoria_rol",
-              "nativeQueryRef": "categoria_rol"
+              "nativeQueryRef": "categoria_rol",
+              "active": true
             }
           ]
         }

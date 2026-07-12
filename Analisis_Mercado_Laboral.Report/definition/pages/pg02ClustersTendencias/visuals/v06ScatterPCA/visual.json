@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
   "name": "v06ScatterPCA",
   "position": {
     "x": 420,
     "y": 190,
     "z": 2001,
-    "width": 440,
     "height": 480,
+    "width": 440,
     "tabOrder": 5
   },
   "visual": {
@@ -27,7 +27,26 @@
                 }
               },
               "queryRef": "Dim_Puestos.Nombre_Puesto",
-              "nativeQueryRef": "Nombre_Puesto"
+              "nativeQueryRef": "Nombre_Puesto",
+              "active": true
+            }
+          ]
+        },
+        "Series": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Clusters"
+                    }
+                  },
+                  "Property": "Nombre_Cluster"
+                }
+              },
+              "queryRef": "Dim_Clusters.Nombre_Cluster",
+              "nativeQueryRef": "Nombre_Cluster"
             }
           ]
         },
@@ -50,7 +69,8 @@
                 }
               },
               "queryRef": "Avg(Fact_Vacantes.PCA_X)",
-              "nativeQueryRef": "Avg of PCA_X"
+              "nativeQueryRef": "Avg of PCA_X",
+              "active": true
             }
           ]
         },
@@ -74,24 +94,6 @@
               },
               "queryRef": "Avg(Fact_Vacantes.PCA_Y)",
               "nativeQueryRef": "Avg of PCA_Y"
-            }
-          ]
-        },
-        "Series": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Dim_Clusters"
-                    }
-                  },
-                  "Property": "Nombre_Cluster"
-                }
-              },
-              "queryRef": "Dim_Clusters.Nombre_Cluster",
-              "nativeQueryRef": "Nombre_Cluster"
             }
           ]
         }
