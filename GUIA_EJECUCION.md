@@ -1,6 +1,6 @@
-# Guía de Configuración y Ejecución desde Cero 🚀
+# Guía de Configuración y Ejecución desde Cero — Examen Semestral 🚀
 
-Esta guía detalla los pasos necesarios para clonar, configurar, instalar dependencias y ejecutar de forma local el proyecto **Parcial 2 de Gestión de la Información** de la **FISC - UTP (Semestre I, 2026)**.
+Esta guía detalla los pasos necesarios para clonar, configurar, instalar dependencias y ejecutar de forma local el proyecto **Examen Semestral de Gestión de la Información** de la **FISC - UTP (Semestre I, 2026)**, el cual es una continuación y expansión del Parcial 2.
 
 ---
 
@@ -10,7 +10,8 @@ Asegúrate de contar con lo siguiente instalado en tu equipo antes de comenzar:
 1. **Python 3.9 o superior** (Durante la instalación en Windows, asegúrate de marcar la casilla *"Add Python to PATH"*).
 2. **Git** (Para clonar el repositorio).
 3. Conexión a Internet activa.
-4. **Opcional:** Una clave API de Google Gemini (puedes obtener una gratis en [Google AI Studio](https://aistudio.google.com/apikey)).
+4. **Power BI Desktop** (Versión de Junio de 2026 o posterior, compatible con proyectos PBIP y traducción de metadatos TMDL).
+5. **Opcional:** Una clave API de Google Gemini (puedes obtener una gratis en [Google AI Studio](https://aistudio.google.com/apikey)).
 
 ---
 
@@ -19,8 +20,8 @@ Asegúrate de contar con lo siguiente instalado en tu equipo antes de comenzar:
 Abre la terminal de tu sistema operativo (Símbolo del Sistema / CMD, PowerShell o Terminal de macOS/Linux) y clona esta nueva versión del repositorio:
 
 ```bash
-git clone https://github.com/Shazzy004/Parcial2Gestion.git
-cd Parcial2Gestion
+git clone https://github.com/fernandojjq/semestral.git
+cd semestral
 ```
 
 ---
@@ -77,7 +78,7 @@ pip install -r requirements.txt
 
 ## 🔑 Paso 4: Configurar la Clave de API de Gemini (Opcional)
 
-Si deseas utilizar la inteligencia artificial para normalizar ofertas en el scraping o generar el informe estratégico ejecutivo en el dashboard:
+Si deseas utilizar la inteligencia artificial para normalizar ofertas en el scraping, generar el informe estratégico ejecutivo en el dashboard, o chatear interactivamente en SQL mediante lenguaje natural:
 
 1. Crea una copia del archivo `.env.example` y llámalo `.env` en la raíz del proyecto.
 2. Abre el archivo `.env` recién creado con cualquier editor de texto.
@@ -86,14 +87,14 @@ Si deseas utilizar la inteligencia artificial para normalizar ofertas en el scra
    GEMINI_API_KEY="Tu_Clave_Real_De_Google_AI_Studio"
    ```
 
-*Nota: Si no posees una API Key, la aplicación seguirá funcionando perfectamente utilizando un robusto extractor heurístico local basado en expresiones regulares (Regex/NLP) preprogramado.*
+*Nota: Si no posees una API Key, la aplicación seguirá funcionando perfectamente utilizando un extractor heurístico local basado en expresiones regulares (Regex/NLP) preprogramado.*
 
 ---
 
 ## 🏃 Paso 5: Métodos de Ejecución
 
-### Método A: Ejecución Directa en Windows (El más rápido)
-Si utilizas el sistema operativo Windows, hemos creado un script por lotes que automatiza los pasos previos. Simplemente haz doble clic sobre el archivo:
+### Método A: Ejecución Directa de la Web App en Windows (El más rápido)
+Si utilizas el sistema operativo Windows, hemos creado un script por lotes que automatiza los pasos previos de la aplicación web. Simplemente haz doble clic sobre el archivo:
 👉 **`ejecutar_dashboard.bat`** (ubicado en la raíz del proyecto).
 
 Este script de forma automática:
@@ -111,24 +112,28 @@ Ejecuta el servidor web local:
 streamlit run src/app.py
 ```
 * Tu navegador predeterminado se abrirá automáticamente en: `http://localhost:8501`.
-* Si la consola te solicita ingresar un correo electrónico (*"Welcome to Streamlit! Email:"*), puedes **presionar ENTER** dejándolo en blanco para continuar.
+* Si la consola te solicita ingresar un correo electrónico, presiona **ENTER** dejándolo en blanco.
 
-#### B. Ejecutar el Pipeline de Ingesta desde Cero (Opcional)
-Si deseas borrar la base de datos pre-cargada y forzar una nueva descarga en vivo de vacantes de empleo mediante scraping y APIs:
+#### B. Ejecutar el Pipeline de Ingesta y Modelado Estrella (Opcional)
+Si deseas borrar los datos existentes y descargar nuevas vacantes reales desde cero, regenerando también las tablas del Modelo Estrella:
 ```bash
-python src/pipeline.py
+python src/pipeline.py             # Ejecuta scraping real + APIs + simulados
+python src/exportador_estrella.py  # Genera dimensiones y hechos CSV en data/processed/modelo_estrella/
+python src/modelo.py               # Re-entrena K-Means (Silhouette/PCA) y Regresión Lineal (R2)
 ```
-Este pipeline:
-* Realiza web scraping real en *Computrabajo* y *Konzerta*.
-* Consume la API pública de *Arbeitnow* paginando hasta 5 páginas e intenta *RemoteOK* como fallback real.
-* Añade un bloque de 150 registros simulados para análisis histórico temporal de tendencias.
-* Estructura los datos con Gemini (o el parser heurístico local) y los guarda en SQLite y CSV.
 
-#### C. Entrenar los Modelos de Machine Learning (Opcional)
-Para re-entrenar el K-Means y calcular la Regresión Lineal de tendencias de habilidades sobre los nuevos datos guardados:
-```bash
-python src/modelo.py
-```
+---
+
+### Método C: Ejecución y Visualización en Power BI Desktop
+
+Hemos integrado el proyecto utilizando las últimas herramientas de desarrollo de Power BI (formato Developer Project PBIP).
+
+1. Abre el archivo **`Analisis_Mercado_Laboral.pbip`** (o en su defecto `Analisis_Mercado_Laboral.pbix`) utilizando Power BI Desktop.
+2. Si Power BI solicita actualizar los datos, haz clic en **Actualizar**. Se conectará a las tablas CSV locales de la carpeta `data/processed/modelo_estrella/` de forma relativa.
+3. **Revisar Modelado Estrella:** Ve a la vista de Modelo a la izquierda para inspeccionar las relaciones estrella establecidas entre `Fact_Vacantes` y sus dimensiones.
+4. **Revisar Transformaciones en Power Query:** Haz clic en **Transformar datos** en la barra superior. Al seleccionar las tablas `Fact_Vacantes` o `Dim_Puestos` o `Dim_Fecha`, podrás ver en el panel derecho los **Pasos aplicados** (ej. `Nivel Salarial Condicional`, `Categoria en Mayusculas`, etc.) codificados en lenguaje M.
+5. **Revisar Medidas DAX:** En el panel de campos derecho, la tabla con icono de calculadora `Medidas` centraliza todas las fórmulas DAX implementadas para su validación (ej. *Total de Vacantes*, *Brecha Salarial IT*, *Porcentaje Remoto/Internacional*, etc.).
+6. **Consultas de Lenguaje Natural (IA):** Navega hasta la pestaña **"Consultas de Lenguaje Natural"** en el reporte para probar el campo interactivo Q&A y chatear con los datos.
 
 ---
 
@@ -140,5 +145,5 @@ python src/modelo.py
 2. **"API key not valid / Límite de Cuota superado (429)":**
    Es un aviso normal si la clave del archivo `.env` está vacía o es errónea. El pipeline continuará su ejecución de manera exitosa usando el parser heurístico de respaldo local sin interrumpir el flujo.
 
-3. **No se ven reflejados los nuevos datos en el Dashboard:**
-   Si corriste el pipeline de nuevo por consola y no ves los cambios en la página web, haz clic en el botón **`🔄 Recargar datos`** en la barra lateral izquierda del Dashboard para limpiar la caché de Streamlit.
+3. **La tabla de fechas de Power BI arroja referencias cíclicas:**
+   Esto ocurre si modificas la tabla de fechas en Power Query estando la opción de "Fecha y hora automáticas" habilitada en Power BI Desktop. El proyecto ya ha sido corregido para evitar este conflicto; asegúrate de no aplicar transformaciones en bruto sobre el campo `Mes_Nombre` de `Dim_Fecha` que alteren el ordenamiento.
