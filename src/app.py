@@ -929,6 +929,7 @@ with tab_chat:
                         4. Para búsquedas parciales de texto, usa 'LIKE %texto%'.
                         5. Limita los resultados a un número razonable (ej. 'LIMIT 10' o 'LIMIT 20') a menos que se pidan totales.
                         6. Devuelve EXCLUSIVAMENTE el código SQL dentro de un bloque markdown ```sql ... ```. No escribas texto explicativo antes ni después de la consulta.
+                        7. Para búsquedas geográficas relacionadas con 'Panamá', usa siempre 'LIKE %Panam%' (sin la letra final 'á' o 'a') para evitar fallas de codificación de caracteres en SQLite.
                         
                         Pregunta del usuario: "{pregunta_pendiente}"
                         """
