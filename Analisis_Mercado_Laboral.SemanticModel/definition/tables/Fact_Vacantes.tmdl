@@ -144,8 +144,8 @@ table Fact_Vacantes
 				let
 				    Origen = Csv.Document(File.Contents("D:\Downloads\Gestion informacion\data\processed\modelo_estrella\Fact_Vacantes.csv"),[Delimiter=",", Columns=13, Encoding=65001, QuoteStyle=QuoteStyle.None]),
 				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
-				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Vacante", Int64.Type}, {"ID_Empresa", Int64.Type}, {"ID_Portal", Int64.Type}, {"ID_Puesto", Int64.Type}, {"ID_Cluster", Int64.Type}, {"ID_Fecha", type date}, {"Experiencia_Anios", Int64.Type}, {"Es_Simulado", Int64.Type}}),
-				    #"Tipo cambiado decimales" = Table.TransformColumnTypes(#"Tipo cambiado",{{"Salario_Min", type number}, {"Salario_Max", type number}, {"Salario_Medio", type number}, {"PCA_X", type number}, {"PCA_Y", type number}}, "en-US"),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Vacante", Int64.Type}, {"ID_Empresa", Int64.Type}, {"ID_Portal", Int64.Type}, {"ID_Puesto", Int64.Type}, {"ID_Cluster", Int64.Type}, {"Experiencia_Anios", Int64.Type}, {"Es_Simulado", Int64.Type}}),
+				    #"Tipo cambiado decimales" = Table.TransformColumnTypes(#"Tipo cambiado",{{"Salario_Min", type number}, {"Salario_Max", type number}, {"Salario_Medio", type number}, {"PCA_X", type number}, {"PCA_Y", type number}, {"ID_Fecha", type date}}, "en-US"),
 				    #"Nivel Salarial Condicional" = Table.AddColumn(#"Tipo cambiado decimales", "Nivel_Salarial", each if [Salario_Medio] >= 3000 then "Alto" else if [Salario_Medio] >= 1800 then "Medio" else "Bajo", type text)
 				in
 				    #"Nivel Salarial Condicional"

@@ -62,6 +62,7 @@ table Dim_Fecha
 
 	column Mes_Nombre
 		dataType: string
+		sortByColumn: Mes
 		lineageTag: 6a6196d5-6c4f-47d5-9667-153f7ac647da
 		summarizeBy: none
 		sourceColumn: Mes_Nombre
@@ -100,9 +101,10 @@ table Dim_Fecha
 				let
 				    Origen = Csv.Document(File.Contents("D:\Downloads\Gestion informacion\data\processed\modelo_estrella\Dim_Fecha.csv"),[Delimiter=",", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.None]),
 				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
-				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Fecha", type date}, {"Fecha", type date}, {"Anio", Int64.Type}, {"Trimestre", Int64.Type}, {"Mes", Int64.Type}, {"Mes_Nombre", type text}, {"Semana", Int64.Type}, {"Dia", Int64.Type}, {"Dia_Semana_Nombre", type text}})
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"Anio", Int64.Type}, {"Trimestre", Int64.Type}, {"Mes", Int64.Type}, {"Mes_Nombre", type text}, {"Semana", Int64.Type}, {"Dia", Int64.Type}, {"Dia_Semana_Nombre", type text}}),
+				    #"Tipo cambiado fechas" = Table.TransformColumnTypes(#"Tipo cambiado",{{"ID_Fecha", type date}, {"Fecha", type date}}, "en-US")
 				in
-				    #"Tipo cambiado"
+				    #"Tipo cambiado fechas"
 
 	annotation PBI_NavigationStepName = Navegación
 
