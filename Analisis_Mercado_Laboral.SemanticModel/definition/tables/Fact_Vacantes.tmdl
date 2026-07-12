@@ -130,15 +130,24 @@ table Fact_Vacantes
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	column Nivel_Salarial
+		dataType: string
+		lineageTag: 1f4e94f2-70dc-4b38-a978-37c4ec82b7e5
+		summarizeBy: none
+		sourceColumn: Nivel_Salarial
+
+		annotation SummarizationSetBy = Automatic
+
 	partition Fact_Vacantes = m
 		mode: import
 		source =
 				let
 				    Origen = Csv.Document(File.Contents("D:\Downloads\Gestion informacion\data\processed\modelo_estrella\Fact_Vacantes.csv"),[Delimiter=",", Columns=13, Encoding=65001, QuoteStyle=QuoteStyle.None]),
 				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
-				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Vacante", Int64.Type}, {"ID_Empresa", Int64.Type}, {"ID_Portal", Int64.Type}, {"ID_Puesto", Int64.Type}, {"ID_Cluster", Int64.Type}, {"ID_Fecha", type date}, {"Salario_Min", type number}, {"Salario_Max", type number}, {"Salario_Medio", type number}, {"Experiencia_Anios", Int64.Type}, {"Es_Simulado", Int64.Type}, {"PCA_X", type number}, {"PCA_Y", type number}})
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Vacante", Int64.Type}, {"ID_Empresa", Int64.Type}, {"ID_Portal", Int64.Type}, {"ID_Puesto", Int64.Type}, {"ID_Cluster", Int64.Type}, {"ID_Fecha", type date}, {"Salario_Min", type number}, {"Salario_Max", type number}, {"Salario_Medio", type number}, {"Experiencia_Anios", Int64.Type}, {"Es_Simulado", Int64.Type}, {"PCA_X", type number}, {"PCA_Y", type number}}),
+				    #"Nivel Salarial Condicional" = Table.AddColumn(#"Tipo cambiado", "Nivel_Salarial", each if [Salario_Medio] >= 3000 then "Alto" else if [Salario_Medio] >= 1800 then "Medio" else "Bajo", type text)
 				in
-				    #"Tipo cambiado"
+				    #"Nivel Salarial Condicional"
 
 	annotation PBI_NavigationStepName = Navegación
 
