@@ -311,7 +311,7 @@ salario_range = st.sidebar.slider(
     "Rango Salarial Mensual (USD $)",
     min_value=500.0,
     max_value=10000.0,
-    value=(1000.0, 4500.0),
+    value=(500.0, 10000.0),
     step=100.0
 )
 
@@ -321,7 +321,7 @@ selected_exp = st.sidebar.slider(
     "Años de Experiencia Requerida",
     min_value=0,
     max_value=10,
-    value=(0, 6)
+    value=(0, 10)
 )
 
 

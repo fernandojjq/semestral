@@ -65,7 +65,7 @@ table Fact_Vacantes
 	column Salario_Min
 		dataType: double
 		lineageTag: 60f5373c-cebb-47b3-9f06-2df6f41baaa9
-		summarizeBy: sum
+		summarizeBy: average
 		sourceColumn: Salario_Min
 
 		annotation SummarizationSetBy = Automatic
@@ -75,7 +75,7 @@ table Fact_Vacantes
 	column Salario_Max
 		dataType: double
 		lineageTag: ef1b1921-05f7-4cb0-a977-7d6e77c37943
-		summarizeBy: sum
+		summarizeBy: average
 		sourceColumn: Salario_Max
 
 		annotation SummarizationSetBy = Automatic
@@ -85,7 +85,7 @@ table Fact_Vacantes
 	column Salario_Medio
 		dataType: double
 		lineageTag: 2af0d946-d059-4f6f-9d49-d70f520b6fe6
-		summarizeBy: sum
+		summarizeBy: average
 		sourceColumn: Salario_Medio
 
 		annotation SummarizationSetBy = Automatic
@@ -96,7 +96,7 @@ table Fact_Vacantes
 		dataType: int64
 		formatString: 0
 		lineageTag: fedcb8ef-8f13-4cd8-b7dd-9029e30611d7
-		summarizeBy: sum
+		summarizeBy: average
 		sourceColumn: Experiencia_Anios
 
 		annotation SummarizationSetBy = Automatic
