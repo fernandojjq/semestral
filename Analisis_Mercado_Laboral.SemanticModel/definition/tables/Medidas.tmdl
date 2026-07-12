@@ -13,7 +13,7 @@ table Medidas
 		formatString: B/. #,##0.00
 		lineageTag: 4d8fcb42-7ded-4264-b995-9c16204eb7bf
 
-	measure 'Salario Medio Promedio' = AVERAGE(Fact_Vacantes[Salario_Medio])
+	measure 'Salario Medio Promedio' = DIVIDE([Salario Mínimo Promedio] + [Salario Máximo Promedio], 2, 0)
 		formatString: B/. #,##0.00
 		lineageTag: 6131bf35-44c1-41ed-abb1-ac9fb9173957
 
