@@ -94,27 +94,16 @@ table Dim_Fecha
 
 		annotation SummarizationSetBy = Automatic
 
-	column Nombre_Mes_Corto
-		dataType: string
-		lineageTag: 09592aca-f9ae-42ed-8a99-199fd559c7a1
-		summarizeBy: none
-		sourceColumn: Nombre_Mes_Corto
-
-		annotation SummarizationSetBy = Automatic
-
 	partition Dim_Fecha = m
 		mode: import
 		source =
 				let
 				    Origen = Csv.Document(File.Contents("D:\Downloads\Gestion informacion\data\processed\modelo_estrella\Dim_Fecha.csv"),[Delimiter=",", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.None]),
 				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
-				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Fecha", type date}, {"Fecha", type date}, {"Anio", Int64.Type}, {"Trimestre", Int64.Type}, {"Mes", Int64.Type}, {"Mes_Nombre", type text}, {"Semana", Int64.Type}, {"Dia", Int64.Type}, {"Dia_Semana_Nombre", type text}}),
-				    #"Mes Nombre en Mayusculas" = Table.TransformColumns(#"Tipo cambiado",{{"Mes_Nombre", Text.Proper, type text}}),
-				    #"Agregar Mes Corto" = Table.AddColumn(#"Mes Nombre en Mayusculas", "Nombre_Mes_Corto", each Text.Start([Mes_Nombre], 3), type text)
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Fecha", type date}, {"Fecha", type date}, {"Anio", Int64.Type}, {"Trimestre", Int64.Type}, {"Mes", Int64.Type}, {"Mes_Nombre", type text}, {"Semana", Int64.Type}, {"Dia", Int64.Type}, {"Dia_Semana_Nombre", type text}})
 				in
-				    #"Agregar Mes Corto"
+				    #"Tipo cambiado"
 
 	annotation PBI_NavigationStepName = Navegación
 
 	annotation PBI_ResultType = Table
-
