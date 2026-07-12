@@ -479,7 +479,7 @@ with col7:
     """, unsafe_allow_html=True)
 
 with col8:
-    n_remoto = len(df_filtrado[df_filtrado["portal"].isin(["Arbeitnow", "RemoteOK"])])
+    n_remoto = len(df_filtrado[df_filtrado["portal"].str.contains("Arbeitnow|RemoteOK", case=False, na=False)])
     pct_remoto = (n_remoto / len(df_filtrado) * 100) if len(df_filtrado) > 0 else 0
     st.markdown(f"""
         <div class="metric-card card-purple">
