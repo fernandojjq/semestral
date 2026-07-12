@@ -18,6 +18,10 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
+from dotenv import load_dotenv
+
+# Cargar variables de entorno del archivo .env
+load_dotenv()
 
 # Configurar el diseño de la página de Streamlit de forma premium
 st.set_page_config(
@@ -362,7 +366,7 @@ else:
 # Filtro por habilidades (debe cumplir con al menos una de las seleccionadas si el filtro no está vacío)
 if selected_skills:
     def tiene_habilidades(skills_str):
-        if not skills_str:
+        if not isinstance(skills_str, str) or not skills_str.strip():
             return False
         skills_oferta = [s.strip() for s in skills_str.split(",")]
         return any(skill in skills_oferta for skill in selected_skills)
