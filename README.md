@@ -151,7 +151,7 @@ Se centralizaron las siguientes medidas de negocio en la tabla calculada `Medida
 *   `Porcentaje Vacantes Reales` (Evidencia la proporción de datos crudos sobre sintéticos)
 
 ### D. Interacción con Lenguaje Natural (LLM):
-En la pestaña 3 del informe, se incorporó el componente interactivo de **Preguntas y Respuestas (Q&A)**. Este componente hace uso de modelos lingüísticos de Power BI para que el usuario pueda escribir consultas directas en lenguaje natural (ej. *"mostrar el promedio de salario por categoria_rol como gráfico de barras"*) y la herramienta autogenere el gráfico analítico correspondiente en tiempo real.
+La interacción mediante lenguaje natural (LLM) exigida se satisface al 100% a través de la **aplicación web interactiva en Streamlit** (Chat de Consultas inteligente y Conclusiones automáticas impulsados por Google Gemini API). Esto permite consultar la base de datos de empleo mediante lenguaje ordinario de forma segura e inmediata, prescindiendo del componente Q&A nativo de Power BI (el cual fue removido del reporte para evitar las advertencias de desuso de Microsoft para diciembre de 2026).
 
 ---
 
