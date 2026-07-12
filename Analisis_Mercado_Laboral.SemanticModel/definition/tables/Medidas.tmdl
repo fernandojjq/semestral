@@ -6,15 +6,15 @@ table Medidas
 		lineageTag: 40df124b-088b-4619-a7ac-b301fc259425
 
 	measure 'Salario Mínimo Promedio' = AVERAGE(Fact_Vacantes[Salario_Min])
-		formatString: B/. #,##0.00
+		formatString: "B/." #,##0
 		lineageTag: 44888448-0044-4050-a881-4033cb90f26d
 
 	measure 'Salario Máximo Promedio' = AVERAGE(Fact_Vacantes[Salario_Max])
-		formatString: B/. #,##0.00
+		formatString: "B/." #,##0
 		lineageTag: 4d8fcb42-7ded-4264-b995-9c16204eb7bf
 
 	measure 'Salario Medio Promedio' = DIVIDE([Salario Mínimo Promedio] + [Salario Máximo Promedio], 2, 0)
-		formatString: B/. #,##0.00
+		formatString: "B/." #,##0
 		lineageTag: 6131bf35-44c1-41ed-abb1-ac9fb9173957
 
 	measure 'Experiencia Promedio Requerida' = AVERAGE(Fact_Vacantes[Experiencia_Anios])
@@ -26,7 +26,7 @@ table Medidas
 		lineageTag: fba9cf08-de8b-4fc6-99ea-00765593dfc5
 
 	measure 'Valor por Año de Experiencia' = DIVIDE([Salario Medio Promedio], [Experiencia Promedio Requerida], 0)
-		formatString: B/. #,##0.00
+		formatString: "B/." #,##0
 		lineageTag: 0b3895ba-7fc5-48a3-b282-d1236ba41a31
 
 	measure 'Porcentaje Remoto/Internacional' = DIVIDE(CALCULATE(COUNT(Fact_Vacantes[ID_Vacante]), Dim_Portales[Nombre_Portal] = "Arbeitnow API"), [Total de Vacantes], 0)
