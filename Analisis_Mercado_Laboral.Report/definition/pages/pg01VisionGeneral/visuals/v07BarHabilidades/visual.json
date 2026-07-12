@@ -5,8 +5,8 @@
     "x": 270,
     "y": 190,
     "z": 2000,
-    "height": 480,
     "width": 480,
+    "height": 480,
     "tabOrder": 6
   },
   "visual": {
@@ -27,8 +27,7 @@
                 }
               },
               "queryRef": "Dim_Habilidades.Nombre_Habilidad",
-              "nativeQueryRef": "Nombre_Habilidad",
-              "active": true
+              "nativeQueryRef": "Nombre_Habilidad"
             }
           ]
         },

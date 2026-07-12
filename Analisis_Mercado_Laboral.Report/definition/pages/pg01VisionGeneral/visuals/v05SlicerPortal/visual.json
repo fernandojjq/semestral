@@ -5,8 +5,8 @@
     "x": 30,
     "y": 190,
     "z": 500,
-    "height": 230,
     "width": 220,
+    "height": 230,
     "tabOrder": 4
   },
   "visual": {
@@ -27,8 +27,7 @@
                 }
               },
               "queryRef": "Dim_Portales.Nombre_Portal",
-              "nativeQueryRef": "Nombre_Portal",
-              "active": true
+              "nativeQueryRef": "Nombre_Portal"
             }
           ]
         }

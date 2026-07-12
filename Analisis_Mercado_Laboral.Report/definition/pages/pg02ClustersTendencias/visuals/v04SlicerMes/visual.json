@@ -5,8 +5,8 @@
     "x": 930,
     "y": 40,
     "z": 1003,
-    "height": 130,
     "width": 280,
+    "height": 130,
     "tabOrder": 3
   },
   "visual": {
@@ -27,8 +27,7 @@
                 }
               },
               "queryRef": "Dim_Fecha.Mes_Nombre",
-              "nativeQueryRef": "Mes_Nombre",
-              "active": true
+              "nativeQueryRef": "Mes_Nombre"
             }
           ]
         }

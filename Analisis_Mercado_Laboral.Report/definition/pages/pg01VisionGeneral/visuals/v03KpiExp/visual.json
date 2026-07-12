@@ -5,12 +5,27 @@
     "x": 630,
     "y": 40,
     "z": 1002,
-    "height": 130,
     "width": 280,
+    "height": 130,
     "tabOrder": 2
   },
   "visual": {
     "visualType": "cardVisual",
+    "objects": {
+      "cards": [
+        {
+          "properties": {
+            "showLabel": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
     "query": {
       "queryState": {
         "Data": {
@@ -32,31 +47,6 @@
           ]
         }
       }
-    },
-    "objects": {
-      "value": [
-        {
-          "properties": {
-            "labelDisplayUnits": {
-              "expr": {
-                "Literal": {
-                  "Value": "1D"
-                }
-              }
-            },
-            "labelPrecision": {
-              "expr": {
-                "Literal": {
-                  "Value": "1L"
-                }
-              }
-            }
-          },
-          "selector": {
-            "metadata": "Medidas.Experiencia Promedio Requerida"
-          }
-        }
-      ]
     },
     "drillFilterOtherVisuals": true
   }

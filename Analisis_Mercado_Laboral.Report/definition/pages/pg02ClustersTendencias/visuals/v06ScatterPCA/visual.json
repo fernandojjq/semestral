@@ -5,8 +5,8 @@
     "x": 420,
     "y": 190,
     "z": 2001,
-    "height": 480,
     "width": 440,
+    "height": 480,
     "tabOrder": 5
   },
   "visual": {
@@ -27,26 +27,7 @@
                 }
               },
               "queryRef": "Dim_Puestos.Nombre_Puesto",
-              "nativeQueryRef": "Nombre_Puesto",
-              "active": true
-            }
-          ]
-        },
-        "Series": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Dim_Clusters"
-                    }
-                  },
-                  "Property": "Nombre_Cluster"
-                }
-              },
-              "queryRef": "Dim_Clusters.Nombre_Cluster",
-              "nativeQueryRef": "Nombre_Cluster"
+              "nativeQueryRef": "Nombre_Puesto"
             }
           ]
         },
@@ -69,8 +50,7 @@
                 }
               },
               "queryRef": "Avg(Fact_Vacantes.PCA_X)",
-              "nativeQueryRef": "Avg of PCA_X",
-              "active": true
+              "nativeQueryRef": "Avg of PCA_X"
             }
           ]
         },
@@ -94,6 +74,24 @@
               },
               "queryRef": "Avg(Fact_Vacantes.PCA_Y)",
               "nativeQueryRef": "Avg of PCA_Y"
+            }
+          ]
+        },
+        "Series": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Clusters"
+                    }
+                  },
+                  "Property": "Nombre_Cluster"
+                }
+              },
+              "queryRef": "Dim_Clusters.Nombre_Cluster",
+              "nativeQueryRef": "Nombre_Cluster"
             }
           ]
         }

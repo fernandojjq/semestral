@@ -5,8 +5,8 @@
     "x": 770,
     "y": 190,
     "z": 2001,
-    "height": 480,
     "width": 480,
+    "height": 480,
     "tabOrder": 7
   },
   "visual": {
@@ -27,8 +27,7 @@
                 }
               },
               "queryRef": "Dim_Puestos.categoria_rol",
-              "nativeQueryRef": "categoria_rol",
-              "active": true
+              "nativeQueryRef": "categoria_rol"
             }
           ]
         },
@@ -42,11 +41,11 @@
                       "Entity": "Medidas"
                     }
                   },
-                  "Property": "Salario Mínimo Promedio"
+                  "Property": "Salario M\u00ednimo Promedio"
                 }
               },
-              "queryRef": "Medidas.Salario Mínimo Promedio",
-              "nativeQueryRef": "Salario Mínimo Promedio"
+              "queryRef": "Medidas.Salario M\u00ednimo Promedio",
+              "nativeQueryRef": "Salario M\u00ednimo Promedio"
             },
             {
               "field": {
@@ -56,11 +55,11 @@
                       "Entity": "Medidas"
                     }
                   },
-                  "Property": "Salario Máximo Promedio"
+                  "Property": "Salario M\u00e1ximo Promedio"
                 }
               },
-              "queryRef": "Medidas.Salario Máximo Promedio",
-              "nativeQueryRef": "Salario Máximo Promedio"
+              "queryRef": "Medidas.Salario M\u00e1ximo Promedio",
+              "nativeQueryRef": "Salario M\u00e1ximo Promedio"
             }
           ]
         }

@@ -5,8 +5,8 @@
     "x": 630,
     "y": 40,
     "z": 1002,
-    "height": 130,
     "width": 280,
+    "height": 130,
     "tabOrder": 2
   },
   "visual": {
@@ -27,8 +27,7 @@
                 }
               },
               "queryRef": "Dim_Clusters.Nombre_Cluster",
-              "nativeQueryRef": "Nombre_Cluster",
-              "active": true
+              "nativeQueryRef": "Nombre_Cluster"
             }
           ]
         }
