@@ -23,11 +23,11 @@
                       "Entity": "Dim_Portales"
                     }
                   },
-                  "Property": "Nombre_Portal"
+                  "Property": "Region"
                 }
               },
-              "queryRef": "Dim_Portales.Nombre_Portal",
-              "nativeQueryRef": "Nombre_Portal"
+              "queryRef": "Dim_Portales.Region",
+              "nativeQueryRef": "Region"
             }
           ]
         }
