@@ -18,15 +18,24 @@ table Dim_Portales
 
 		annotation SummarizationSetBy = Automatic
 
+	column Origen
+		dataType: string
+		lineageTag: a3dfd82b-6bc6-4b82-84cf-29d0f941a3bc
+		summarizeBy: none
+		sourceColumn: Origen
+
+		annotation SummarizationSetBy = Automatic
+
 	partition Dim_Portales = m
 		mode: import
 		source =
 				let
 				    Origen = Csv.Document(File.Contents("D:\Downloads\Gestion informacion\data\processed\modelo_estrella\Dim_Portales.csv"),[Delimiter=",", Columns=2, Encoding=65001, QuoteStyle=QuoteStyle.None]),
 				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
-				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Portal", Int64.Type}, {"Nombre_Portal", type text}})
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Portal", Int64.Type}, {"Nombre_Portal", type text}}),
+				    #"Origen Anadido" = Table.AddColumn(#"Tipo cambiado", "Origen", each if [Nombre_Portal] = "Arbeitnow API" then "Externo" else "Panamá", type text)
 				in
-				    #"Tipo cambiado"
+				    #"Origen Anadido"
 
 	annotation PBI_NavigationStepName = Navegación
 
