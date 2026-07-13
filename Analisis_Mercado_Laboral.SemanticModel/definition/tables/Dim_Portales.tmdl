@@ -18,11 +18,11 @@ table Dim_Portales
 
 		annotation SummarizationSetBy = Automatic
 
-	column Origen
+	column Region
 		dataType: string
 		lineageTag: a3dfd82b-6bc6-4b82-84cf-29d0f941a3bc
 		summarizeBy: none
-		sourceColumn: Origen
+		sourceColumn: Region
 
 		annotation SummarizationSetBy = Automatic
 
@@ -30,12 +30,12 @@ table Dim_Portales
 		mode: import
 		source =
 				let
-				    Origen = Csv.Document(File.Contents("D:\Downloads\Gestion informacion\data\processed\modelo_estrella\Dim_Portales.csv"),[Delimiter=",", Columns=2, Encoding=65001, QuoteStyle=QuoteStyle.None]),
-				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    Source = Csv.Document(File.Contents("D:\Downloads\Gestion informacion\data\processed\modelo_estrella\Dim_Portales.csv"),[Delimiter=",", Columns=2, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Portal", Int64.Type}, {"Nombre_Portal", type text}}),
-				    #"Origen Anadido" = Table.AddColumn(#"Tipo cambiado", "Origen", each if [Nombre_Portal] = "Arbeitnow API" then "Externo" else "Panamá", type text)
+				    #"Region Anadida" = Table.AddColumn(#"Tipo cambiado", "Region", each if [Nombre_Portal] = "Arbeitnow API" then "Externo" else "Panamá", type text)
 				in
-				    #"Origen Anadido"
+				    #"Region Anadida"
 
 	annotation PBI_NavigationStepName = Navegación
 
