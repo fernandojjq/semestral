@@ -1,0 +1,1121 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+Modulo: app.py
+Descripción: Interfaz de usuario interactiva y Dashboard en Streamlit.
+             Carga los datos modelados y proporciona visualizaciones
+             dinámicas con filtros interactivos, mapas de dispersión PCA
+             de clusters de K-Means, tendencias con regresión y un generador
+             de resúmenes ejecutivos con IA (Gemini).
+Autor: Grupo 4 - Gestión de la Información (Semestre I, 2026)
+"""
+
+import os
+import streamlit as st
+import pandas as pd
+import numpy as np
+import plotly.express as px
+import plotly.graph_objects as go
+from datetime import datetime
+from dotenv import load_dotenv
+
+# Cargar variables de entorno del archivo .env
+load_dotenv()
+
+# Configurar el diseño de la página de Streamlit de forma premium
+st.set_page_config(
+    page_title="Mercado Laboral IT Panamá - UTP",
+    page_icon="🇵🇦",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Configuración de Rutas
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_PROC_DIR = os.path.join(BASE_DIR, "data", "processed")
+MODEL_JOBS_PATH = os.path.join(DATA_PROC_DIR, "vacantes_modeladas.csv")
+MODEL_TRENDS_PATH = os.path.join(DATA_PROC_DIR, "tendencias_skills.csv")
+
+# Estilos CSS personalizados para WOW al usuario (Estética Premium, fuentes limpias y tarjetas con sombras)
+st.markdown("""
+    <style>
+    /* Estilo del contenedor principal */
+    .reportview-container {
+        background: var(--background-color, #f7f9fc);
+    }
+    /* Encabezado Principal */
+    .main-header {
+        font-family: 'Inter', 'Outfit', sans-serif;
+        color: #1E3A8A;
+        font-weight: 800;
+        font-size: 2.5rem;
+        margin-bottom: 0.2rem;
+    }
+    .sub-header {
+        font-family: 'Inter', sans-serif;
+        color: var(--text-color, #4B5563);
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+    /* Tarjetas de Métricas Premium (Gradientes y Efectos Hover) */
+    .metric-card {
+        border-radius: 12px;
+        padding: 1.2rem;
+        box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.06);
+        margin-bottom: 1rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border: 1px solid rgba(128, 128, 128, 0.08);
+    }
+    
+    .metric-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Variaciones de Gradientes (Modo Claro) */
+    .card-blue {
+        background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+        border-left: 6px solid #2563EB;
+        color: #1E40AF !important;
+    }
+    .card-green {
+        background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+        border-left: 6px solid #059669;
+        color: #065F46 !important;
+    }
+    .card-amber {
+        background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+        border-left: 6px solid #D97706;
+        color: #92400E !important;
+    }
+    .card-purple {
+        background: linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 100%);
+        border-left: 6px solid #7C3AED;
+        color: #5B21B6 !important;
+    }
+    
+    .metric-title {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.8;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .metric-value {
+        font-size: 1.6rem;
+        font-weight: 800;
+        margin-top: 0.25rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    /* Variaciones de Gradientes (Modo Oscuro mediante detector de esquema de color) */
+    @media (prefers-color-scheme: dark) {
+        .card-blue {
+            background: linear-gradient(135deg, #1E3A8A 0%, #0F172A 100%) !important;
+            border-left: 6px solid #3B82F6 !important;
+            color: #EFF6FF !important;
+        }
+        .card-green {
+            background: linear-gradient(135deg, #064E3B 0%, #0F172A 100%) !important;
+            border-left: 6px solid #10B981 !important;
+            color: #ECFDF5 !important;
+        }
+        .card-amber {
+            background: linear-gradient(135deg, #78350F 0%, #0F172A 100%) !important;
+            border-left: 6px solid #F59E0B !important;
+            color: #FFFBEB !important;
+        }
+        .card-purple {
+            background: linear-gradient(135deg, #4C1D95 0%, #0F172A 100%) !important;
+            border-left: 6px solid #8B5CF6 !important;
+            color: #F5F3FF !important;
+        }
+    }
+    /* Contenedor de Insights IA (Adaptable a Modo Oscuro/Claro) */
+    .insight-box {
+        background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+        border: 1px solid #BFDBFE;
+        color: #1F2937 !important;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    .insight-box h3 {
+        color: #1E3A8A !important;
+        margin-top: 0;
+    }
+    .insight-box div, .insight-box p, .insight-box li, .insight-box span, .insight-box b {
+        color: #1F2937 !important;
+    }
+    .insight-box ul, .insight-box ol, .insight-box li, .insight-box table, .insight-box tr, .insight-box td, .insight-box th {
+        white-space: normal !important;
+    }
+    
+    /* Tarjetas de Clusters: fondo claro fijo + texto NEGRO siempre, para
+       garantizar legibilidad independientemente del tema (claro/oscuro) del
+       sistema o de Streamlit. Se usa !important para ganarle a las variables
+       de tema y a la media query de modo oscuro del navegador. */
+    .cluster-card {
+        background-color: #F3F4F6 !important;
+        color: #111827 !important;
+        border-radius: 8px;
+        padding: 1rem;
+        border-top: 4px solid #10B981;
+        min-height: 220px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1rem;
+    }
+    .cluster-card h4 {
+        margin: 0;
+        color: #111827 !important;
+    }
+    .cluster-card p, .cluster-card b {
+        margin: 5px 0;
+        font-size: 0.9rem;
+        color: #1F2937 !important;
+        opacity: 1;
+    }
+    
+    /* Ajustes específicos de tema oscuro usando media query del sistema */
+    @media (prefers-color-scheme: dark) {
+        .insight-box {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+            border: 1px solid #334155 !important;
+        }
+        .insight-box h3 {
+            color: #38bdf8 !important;
+        }
+        .insight-box div, .insight-box p, .insight-box li, .insight-box span, .insight-box b {
+            color: #f1f5f9 !important;
+        }
+    }
+    /* =================================================================
+       Personalización del icono de los multiselect del sidebar:
+       (1) Ocultar el botón "x" (Clear all) de los multiselect.
+       (2) Reemplazar la flecha desplegable por un "+" azul circular,
+           más moderno e intuitivo para "añadir filtro".
+       Usa :has() (Chrome/Edge modernos).
+       ================================================================= */
+
+    /* (1) Quitar el icono de limpiar todo */
+    section[data-testid="stSidebar"] [data-baseweb="select"] svg[title="Clear all"] {
+        display: none !important;
+    }
+
+    /* (2) Ocultar la flecha original y dibujar un "+" en su lugar */
+    section[data-testid="stSidebar"] [data-baseweb="select"] svg[title="open"] {
+        display: none !important;
+    }
+    section[data-testid="stSidebar"] [data-baseweb="select"] div:has(> svg[title="open"]) {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+    section[data-testid="stSidebar"] [data-baseweb="select"] div:has(> svg[title="open"])::after {
+        content: "+";
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #2563EB;
+        color: #FFFFFF;
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1;
+        box-shadow: 0 1px 3px rgba(37, 99, 235, 0.35);
+        transition: background 0.15s ease, transform 0.15s ease;
+    }
+    /* Efecto hover: el "+" se resalta al pasar el cursor por el filtro */
+    section[data-testid="stSidebar"] [data-baseweb="select"]:hover div:has(> svg[title="open"])::after {
+        background: #1D4ED8;
+        transform: scale(1.10);
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+
+# =====================================================================
+# Cargar Datos y Manejar Fallbacks
+# =====================================================================
+@st.cache_data(ttl=600)
+def cargar_datos_dashboard():
+    """
+    Carga los archivos generados por la fase de ML.
+    Si no existen, retorna None para activar el disparador del pipeline en UI.
+    """
+    if not os.path.exists(MODEL_JOBS_PATH) or not os.path.exists(MODEL_TRENDS_PATH):
+        return None, None
+        
+    df_jobs = pd.read_csv(MODEL_JOBS_PATH)
+    df_trends = pd.read_csv(MODEL_TRENDS_PATH)
+    return df_jobs, df_trends
+
+
+# Interfaz para cuando los datos no existen en el despliegue inicial
+df_jobs, df_trends = cargar_datos_dashboard()
+
+if df_jobs is None or df_trends is None:
+    st.title("🇵🇦 Mercado Laboral IT Panamá")
+    st.warning("⚠️ No se encontraron datos procesados ni modelos entrenados en el sistema.")
+    
+    st.info("Para que los estudiantes de la UTP o el profesor puedan iniciar la aplicación, presione el botón de abajo. Esto ejecutará de forma automática el pipeline completo: Scraping/Simulación -> Extracción por LLM -> Guardado en SQLite -> Modelos de Machine Learning (K-Means y Regresión Lineal).")
+    
+    if st.button("🚀 Ejecutar Pipeline de Ingesta y Entrenar Modelos ML", type="primary"):
+        with st.spinner("Procesando datos y ejecutando modelos... (Esto tomará unos segundos)"):
+            try:
+                # Ejecutar pipeline y modelo programáticamente
+                from pipeline import ejecutar_pipeline
+                from modelo import ejecutar_modelado
+                from exportador_estrella import generar_modelo_estrella
+
+                # Flujo de datos reales y simulados de respaldo
+                ejecutar_pipeline(num_simulados=200)
+                ejecutar_modelado()
+                generar_modelo_estrella()
+                
+                st.success("🎉 ¡Proceso finalizado con éxito! Cargando el Dashboard...")
+                st.rerun()
+            except Exception as e:
+                st.error(f"Error al inicializar el proyecto: {e}")
+    st.stop()
+
+
+def obtener_logo_local():
+    """Retorna la ruta del logo si existe localmente. NO descarga nada de internet
+    para evitar cuelgues al iniciar en Streamlit Cloud."""
+    logo_path = os.path.join(BASE_DIR, "src", "logo_utp.png")
+    return logo_path if os.path.exists(logo_path) else None
+
+
+# =====================================================================
+# Estructuración de la Barra Lateral (Filtros)
+# =====================================================================
+logo_local = obtener_logo_local()
+if logo_local:
+    st.sidebar.image(logo_local, width=90)
+else:
+    st.sidebar.markdown("🏫 **UTP - FISC**")
+st.sidebar.title("Filtros del Mercado")
+st.sidebar.markdown("Use los controles inferiores para filtrar las ofertas de empleo e interactuar con los modelos.")
+
+# --- Opciones disponibles (se calculan antes para inicializar el estado) ---
+categorias_disponibles = sorted(df_jobs["categoria_rol"].unique().tolist())
+portales_disponibles = sorted(df_jobs["portal"].unique().tolist())
+all_skills = set()
+for s_list in df_jobs["habilidades"].dropna().str.split(","):
+    for s in s_list:
+        if s.strip():
+            all_skills.add(s.strip())
+skills_disponibles = sorted(list(all_skills))
+
+# Mapeo de portales a región de origen. Computrabajo y Konzerta publican ofertas
+# panameñas; Arbeitnow API trae ofertas internacionales (mayormente europeas).
+# LinkedIn contiene datos simulados que se clasifican aparte.
+PORTALES_PANAMA = {"Computrabajo", "Konzerta"}
+PORTALES_EXTERNOS = {"Arbeitnow API"}
+ORIGEN_OPTIONS = ["Todos", "Panamá", "Externos"]
+
+# Valores por defecto de cada filtro. Centralizarlos permite (a) inicializar el
+# estado de los widgets y (b) implementar un botón "Restablecer" en un solo lugar.
+FILTER_DEFAULTS = {
+    "f_search": "",
+    "f_cats": categorias_disponibles,
+    "f_portals": portales_disponibles,
+    "f_skills": [],
+    "f_salario": (500.0, 10000.0),
+    "f_exp": (0, 10),
+    "f_origen": "Todos",
+}
+for _k, _v in FILTER_DEFAULTS.items():
+    st.session_state.setdefault(_k, _v)
+
+
+# Los callbacks se ejecutan ANTES de que los widgets se re-instancien en el
+# siguiente rerun, por eso es seguro modificar st.session_state aquí.
+def _reset_filtros():
+    for k, v in FILTER_DEFAULTS.items():
+        st.session_state[k] = v
+
+st.sidebar.button("Restablecer todos los filtros",
+                  on_click=_reset_filtros, use_container_width=True,
+                  help="Vuelve todos los filtros a su valor inicial.")
+
+# 1. Búsqueda de Texto
+search_query = st.sidebar.text_input(
+    "Buscar puesto (Ej: React, Backend)", key="f_search",
+    help="Filtra por nombre del puesto o título original.")
+
+# 2. Filtro por Categorías + atajos Todas / Ninguna
+st.sidebar.markdown("**Categorías de Rol**")
+_cc1, _cc2 = st.sidebar.columns(2)
+_cc1.button("Todas", key="btn_cats_all", use_container_width=True,
+            on_click=lambda: st.session_state.update(f_cats=categorias_disponibles))
+_cc2.button("Ninguna", key="btn_cats_none", use_container_width=True,
+            on_click=lambda: st.session_state.update(f_cats=[]))
+selected_categories = st.sidebar.multiselect(
+    "Categorías de Rol", options=categorias_disponibles,
+    key="f_cats", label_visibility="collapsed",
+    placeholder="Elige una o más categorías")
+
+# 3. Filtro por Portales de Empleo + atajos Todos / Ninguno
+st.sidebar.markdown("**Portales de Origen**")
+_pp1, _pp2 = st.sidebar.columns(2)
+_pp1.button("Todos", key="btn_portals_all", use_container_width=True,
+            on_click=lambda: st.session_state.update(f_portals=portales_disponibles))
+_pp2.button("Ninguno", key="btn_portals_none", use_container_width=True,
+            on_click=lambda: st.session_state.update(f_portals=[]))
+selected_portals = st.sidebar.multiselect(
+    "Portales de Origen", options=portales_disponibles,
+    key="f_portals", label_visibility="collapsed",
+    placeholder="Elige uno o más portales")
+
+# 3b. Filtro por Origen Geográfico (Panamá vs Externos)
+st.sidebar.markdown("**Origen de Ofertas**")
+selected_origen = st.sidebar.radio(
+    "Origen de Ofertas", options=ORIGEN_OPTIONS,
+    key="f_origen", label_visibility="collapsed",
+    help="Panamá = Computrabajo + Konzerta. Externos = Arbeitnow API. LinkedIn (simulados) aparece siempre.")
+
+# 4. Filtro por Habilidades Técnicas + atajos Todas / Ninguna
+st.sidebar.markdown("**Habilidades Técnicas**")
+_ss1, _ss2 = st.sidebar.columns(2)
+_ss1.button("Todas", key="btn_skills_all", use_container_width=True,
+            on_click=lambda: st.session_state.update(f_skills=skills_disponibles))
+_ss2.button("Ninguna", key="btn_skills_none", use_container_width=True,
+            on_click=lambda: st.session_state.update(f_skills=[]))
+selected_skills = st.sidebar.multiselect(
+    "Habilidades Técnicas Requeridas", options=skills_disponibles,
+    key="f_skills", label_visibility="collapsed",
+    placeholder="Vacío = todas las habilidades")
+
+# 5. Filtro de Salario Máximo y Mínimo
+salario_range = st.sidebar.slider(
+    "Rango Salarial Mensual (USD $)",
+    min_value=500.0, max_value=10000.0, step=100.0, key="f_salario",
+    help="Muestra ofertas cuyo rango salarial se solape con el seleccionado.")
+
+# 6. Años de Experiencia Requeridos
+selected_exp = st.sidebar.slider(
+    "Años de Experiencia Requerida",
+    min_value=0, max_value=10, key="f_exp")
+
+
+# 7. Información de los Integrantes del Grupo 4
+st.sidebar.markdown("---")
+st.sidebar.markdown("""
+### 👥 Grupo 4 - Integrantes:
+* **Bryan Law** (8-1011-2459)
+* **Evaristo Alvarez** (8-1011-177)
+* **Fernando Jimenez** (20-24-7669)
+* **Manuel Campos** (8-1022-1118)
+* **Diego Gordon** (8-1017-349)
+
+*Gestión de la Información — Semestre I, 2026*
+""")
+
+
+# =====================================================================
+# Lógica de Filtrado de Datos
+# =====================================================================
+df_filtrado = df_jobs.copy()
+
+# Filtro por búsqueda de texto
+if search_query:
+    df_filtrado = df_filtrado[
+        df_filtrado["puesto"].str.contains(search_query, case=False, na=False) |
+        df_filtrado["titulo_original"].str.contains(search_query, case=False, na=False)
+    ]
+
+# Filtro por categorías
+if selected_categories:
+    df_filtrado = df_filtrado[df_filtrado["categoria_rol"].isin(selected_categories)]
+else:
+    df_filtrado = df_filtrado.iloc[0:0] # Tabla vacía si no selecciona ninguna
+
+# Filtro por portales
+if selected_portals:
+    df_filtrado = df_filtrado[df_filtrado["portal"].isin(selected_portals)]
+else:
+    df_filtrado = df_filtrado.iloc[0:0]
+
+# Filtro por origen geográfico (Panamá vs Externos).
+# LinkedIn (simulados) pasa siempre para no perder volumen de datos; el filtro
+# segmenta los portales reales: Computrabajo/Konzerta vs Arbeitnow.
+if selected_origen == "Panamá":
+    df_filtrado = df_filtrado[df_filtrado["portal"].isin(PORTALES_PANAMA) |
+                              ~df_filtrado["portal"].isin(PORTALES_PANAMA | PORTALES_EXTERNOS)]
+elif selected_origen == "Externos":
+    df_filtrado = df_filtrado[df_filtrado["portal"].isin(PORTALES_EXTERNOS) |
+                              ~df_filtrado["portal"].isin(PORTALES_PANAMA | PORTALES_EXTERNOS)]
+
+# Filtro por habilidades (debe cumplir con al menos una de las seleccionadas si el filtro no está vacío)
+if selected_skills:
+    def tiene_habilidades(skills_str):
+        if not isinstance(skills_str, str) or not skills_str.strip():
+            return False
+        skills_oferta = [s.strip() for s in skills_str.split(",")]
+        return any(skill in skills_oferta for skill in selected_skills)
+    df_filtrado = df_filtrado[df_filtrado["habilidades"].apply(tiene_habilidades)]
+
+# Filtro por rango salarial (solapamiento de rangos)
+df_filtrado = df_filtrado[
+    (df_filtrado["salario_min"] >= salario_range[0]) & 
+    (df_filtrado["salario_max"] <= salario_range[1])
+]
+
+# Filtro por experiencia
+df_filtrado = df_filtrado[
+    (df_filtrado["experiencia_anios"] >= selected_exp[0]) &
+    (df_filtrado["experiencia_anios"] <= selected_exp[1])
+]
+
+
+# =====================================================================
+# Diseño de la Interfaz Principal (Dashboard)
+# =====================================================================
+
+# Fila de Encabezado
+st.markdown('<div class="main-header">Análisis del Mercado Laboral IT en Panamá</div>', unsafe_allow_html=True)
+st.markdown('<div class="sub-header">Segundo Parcial - Gestión de la Información | Facultad de Ingeniería de Sistemas Computacionales (UTP)</div>', unsafe_allow_html=True)
+
+# Indicador visible del origen de los datos (reales vs simulados)
+if "es_simulado" in df_jobs.columns:
+    n_sim = int(df_jobs["es_simulado"].fillna(0).astype(int).sum())
+    n_real = len(df_jobs) - n_sim
+    if n_real > 0 and n_sim == 0:
+        st.success(f"🟢 **Origen de datos:** {n_real} registros reales (scraping + API pública) · 0 simulados.")
+    elif n_real > 0 and n_sim > 0:
+        st.info(f"🔵 **Origen de datos:** {n_real} reales (scraping + API pública) + {n_sim} simulados de respaldo.")
+    else:
+        st.warning(f"🟡 **Origen de datos:** {n_sim} registros simulados (no se obtuvieron datos reales en esta corrida).")
+
+# Fila 1: Tarjetas de Métricas Clave (Mercado Base)
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    total_ofertas = len(df_filtrado)
+    st.markdown(f"""
+        <div class="metric-card card-blue">
+            <div class="metric-title">Ofertas Activas</div>
+            <div class="metric-value">{total_ofertas}</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    sal_promedio_min = df_filtrado["salario_min"].mean() if len(df_filtrado) > 0 else 0
+    st.markdown(f"""
+        <div class="metric-card card-green">
+            <div class="metric-title">Salario Mínimo Promedio</div>
+            <div class="metric-value">B/. {sal_promedio_min:,.2f}</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    sal_promedio_max = df_filtrado["salario_max"].mean() if len(df_filtrado) > 0 else 0
+    st.markdown(f"""
+        <div class="metric-card card-amber">
+            <div class="metric-title">Salario Máximo Promedio</div>
+            <div class="metric-value">B/. {sal_promedio_max:,.2f}</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+with col4:
+    # Habilidad más buscada en el subset filtrado
+    lista_skills_filtradas = []
+    for s_list in df_filtrado["habilidades"].dropna().str.split(","):
+        lista_skills_filtradas.extend([s.strip() for s in s_list if s.strip()])
+    
+    top_skill = "N/A"
+    if lista_skills_filtradas:
+        top_skill = pd.Series(lista_skills_filtradas).value_counts().index[0]
+        
+    st.markdown(f"""
+        <div class="metric-card card-purple">
+            <div class="metric-title">Habilidad Más Solicitada</div>
+            <div class="metric-value">{top_skill}</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+# Fila 2: Tarjetas de Métricas Avanzadas
+col5, col6, col7, col8 = st.columns(4)
+
+with col5:
+    exp_promedio = df_filtrado["experiencia_anios"].mean() if len(df_filtrado) > 0 else 0
+    st.markdown(f"""
+        <div class="metric-card card-blue">
+            <div class="metric-title">Experiencia Promedio</div>
+            <div class="metric-value">{exp_promedio:.1f} años</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+with col6:
+    brecha_salarial = ((sal_promedio_max - sal_promedio_min) / sal_promedio_min * 100) if sal_promedio_min > 0 else 0
+    st.markdown(f"""
+        <div class="metric-card card-green">
+            <div class="metric-title">Brecha Salarial Máx-Mín</div>
+            <div class="metric-value">{brecha_salarial:.1f}%</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+with col7:
+    sal_promedio_medio = (sal_promedio_min + sal_promedio_max) / 2
+    rel_valor_exp = (sal_promedio_medio / exp_promedio) if exp_promedio > 0 else 0
+    st.markdown(f"""
+        <div class="metric-card card-amber">
+            <div class="metric-title">Valor / Año Experiencia</div>
+            <div class="metric-value">B/. {rel_valor_exp:,.2f}</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+with col8:
+    n_remoto = len(df_filtrado[df_filtrado["portal"].str.contains("Arbeitnow|RemoteOK", case=False, na=False)])
+    pct_remoto = (n_remoto / len(df_filtrado) * 100) if len(df_filtrado) > 0 else 0
+    st.markdown(f"""
+        <div class="metric-card card-purple">
+            <div class="metric-title">Empleo Remoto / Int.</div>
+            <div class="metric-value">{pct_remoto:.1f}%</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+
+
+# =====================================================================
+# Estructura de Pestañas (Tabs)
+# =====================================================================
+tab_mercado, tab_clusters, tab_emergentes, tab_ia, tab_chat = st.tabs([
+    "📊 Visión General del Mercado",
+    "🤖 Clustering de Perfiles (ML)",
+    "📈 Habilidades Emergentes (Tendencias)",
+    "💡 Conclusiones con IA",
+    "💬 Chat de Consultas (IA)"
+])
+
+# ---------------------------------------------------------------------
+# Pestaña 1: Visión General del Mercado
+# ---------------------------------------------------------------------
+with tab_mercado:
+    col_chart1, col_chart2 = st.columns(2)
+    
+    with col_chart1:
+        st.subheader("Top 10 Habilidades Técnicas Más Demandadas")
+        if lista_skills_filtradas:
+            counts = pd.Series(lista_skills_filtradas).value_counts().head(10).reset_index()
+            counts.columns = ["Habilidad", "Cantidad"]
+            fig_skills = px.bar(
+                counts,
+                x="Cantidad",
+                y="Habilidad",
+                orientation='h',
+                color="Cantidad",
+                color_continuous_scale="Blues",
+                labels={"Cantidad": "Número de Vacantes", "Habilidad": "Tecnología"}
+            )
+            fig_skills.update_layout(
+                yaxis={'categoryorder':'total ascending'}, 
+                height=400, 
+                margin=dict(l=0, r=0, t=10, b=10),
+                modebar=dict(color='#3B82F6', activecolor='#10B981')
+            )
+            st.plotly_chart(fig_skills, use_container_width=True)
+        else:
+            st.info("No hay suficientes datos para generar el gráfico.")
+            
+    with col_chart2:
+        st.subheader("Distribución de Salarios por Categoría de Rol")
+        if len(df_filtrado) > 0:
+            fig_salarios = px.box(
+                df_filtrado,
+                x="categoria_rol",
+                y="salario_max",
+                color="categoria_rol",
+                labels={"categoria_rol": "Categoría", "salario_max": "Salario Máximo (USD)"},
+                title="Rangos Salariales Máximos por Categoría"
+            )
+            fig_salarios.update_layout(
+                showlegend=False, 
+                height=400, 
+                margin=dict(l=0, r=0, t=30, b=10),
+                modebar=dict(color='#3B82F6', activecolor='#10B981')
+            )
+            st.plotly_chart(fig_salarios, use_container_width=True)
+        else:
+            st.info("No hay suficientes datos para generar el gráfico.")
+            
+    st.subheader("Detalle de Ofertas Laborales IT Filtradas")
+    if len(df_filtrado) > 0:
+        st.dataframe(
+            df_filtrado[["puesto", "empresa", "portal", "fecha_publicacion", "salario_min", "salario_max", "experiencia_anios", "habilidades", "categoria_rol"]],
+            use_container_width=True,
+            column_config={
+                "puesto": "Puesto",
+                "empresa": "Empresa",
+                "portal": "Portal",
+                "fecha_publicacion": "Publicado",
+                "salario_min": st.column_config.NumberColumn("Salario Mín", format="$ %.2f"),
+                "salario_max": st.column_config.NumberColumn("Salario Máx", format="$ %.2f"),
+                "experiencia_anios": "Experiencia (años)",
+                "habilidades": "Habilidades",
+                "categoria_rol": "Categoría"
+            }
+        )
+    else:
+        st.info("No se encontraron vacantes con los filtros seleccionados.")
+
+# ---------------------------------------------------------------------
+# Pestaña 2: Clustering de Perfiles (ML - K-Means)
+# ---------------------------------------------------------------------
+with tab_clusters:
+    st.subheader("Clustering de Perfiles IT con K-Means y PCA (2D)")
+    st.markdown("""
+        Esta sección aplica la técnica no supervisada de **K-Means Clustering** en base a la similitud de habilidades requeridas en las ofertas de empleo.
+        Los datos de alta dimensionalidad (habilidades vectorizadas por TF-IDF) se proyectan en dos dimensiones utilizando **PCA (Análisis de Componentes Principales)** para poder visualizarlos en un plano cartesiano interactivo.
+    """)
+
+    # Silhouette Score: evidencia de la calidad/rigor del agrupamiento
+    if "silhouette_score" in df_jobs.columns and len(df_jobs) > 0:
+        sil = float(df_jobs["silhouette_score"].iloc[0])
+        if sil >= 0.5:
+            calidad = "buena separación entre perfiles"
+        elif sil >= 0.2:
+            calidad = "estructura débil pero presente"
+        else:
+            calidad = "clusters poco definidos (solapados)"
+        st.metric(
+            "Silhouette Score del Clustering",
+            f"{sil:.4f}",
+            help="Métrica de calidad del K-Means. Rango [-1, 1]: >0.5 buena, 0.2-0.5 débil, <0.2 pobre."
+        )
+        st.caption(f"Interpretación: {calidad}.")
+
+    if len(df_filtrado) > 0:
+        # Gráfico interactivo de dispersión PCA
+        fig_pca = px.scatter(
+            df_filtrado,
+            x="pca_x",
+            y="pca_y",
+            color="nombre_cluster",
+            hover_name="puesto",
+            hover_data=["empresa", "salario_max", "habilidades"],
+            labels={"pca_x": "Componente Principal 1", "pca_y": "Componente Principal 2", "nombre_cluster": "Perfil Identificado"},
+            color_discrete_sequence=px.colors.qualitative.Bold,
+            title="Distribución Geoespacial de Perfiles IT por Habilidades Técnicas"
+        )
+        
+        fig_pca.update_traces(marker=dict(size=10, opacity=0.8, line=dict(width=1, color='DarkSlateGrey')))
+        fig_pca.update_layout(
+            height=550,
+            modebar=dict(color='#3B82F6', activecolor='#10B981')
+        )
+        st.plotly_chart(fig_pca, use_container_width=True)
+        
+        # Desglose de cada cluster
+        st.subheader("Análisis de los Clusters Encontrados")
+        cols_cluster = st.columns(4)
+        
+        unique_clusters = df_filtrado["nombre_cluster"].dropna().unique()
+        for idx, cl_name in enumerate(unique_clusters[:4]):
+            with cols_cluster[idx]:
+                df_cl = df_filtrado[df_filtrado["nombre_cluster"] == cl_name]
+                conteo_cl = len(df_cl)
+                sal_cl = df_cl["salario_max"].mean()
+                
+                # Obtener top skills del cluster
+                skills_cl = []
+                for s_list in df_cl["habilidades"].dropna().str.split(","):
+                    skills_cl.extend([s.strip() for s in s_list if s.strip()])
+                top_skills_cl = pd.Series(skills_cl).value_counts().head(3).index.tolist() if skills_cl else ["N/A"]
+                
+                st.markdown(f"""
+                <div class="cluster-card">
+                    <h4>{cl_name}</h4>
+                    <p><b>Ofertas:</b> {conteo_cl} ({conteo_cl/len(df_filtrado)*100:.1f}%)</p>
+                    <p><b>Salario Promedio:</b> B/. {sal_cl:,.2f}</p>
+                    <p><b>Habilidades Clave:</b> {', '.join(top_skills_cl)}</p>
+                </div>
+                """, unsafe_allow_html=True)
+    else:
+        st.info("Filtra menos datos para analizar los clusters.")
+
+# ---------------------------------------------------------------------
+# Pestaña 3: Habilidades Emergentes (Tendencias Temporales - Regresión)
+# ---------------------------------------------------------------------
+with tab_emergentes:
+    st.subheader("Predicción y Análisis de Habilidades Emergentes")
+    st.markdown("""
+        Esta sección analiza la demanda temporal de las tecnologías usando las **fechas de publicación reales** capturadas en el scraping.
+        Ajustamos un modelo de **Regresión Lineal** ($y = mx + b$) por habilidad, donde la pendiente ($m$) es la tasa de crecimiento por periodo (semanal o quincenal según el rango de fechas disponible).
+        El **R²** mide la confiabilidad del ajuste: si es bajo (< 0.2) o hay pocos periodos, la tendencia se marca como *no confiable* en lugar de afirmarla.
+    """)
+
+    if "granularidad" in df_trends.columns and len(df_trends) > 0:
+        gran = df_trends["granularidad"].iloc[0]
+        n_per = int(df_trends["n_periodos"].iloc[0]) if "n_periodos" in df_trends.columns else 0
+        st.caption(f"Agrupación temporal usada: **{gran}** · {n_per} periodos analizados.")
+    
+    # Mostrar tabla de tendencias estimadas por el modelo de Regresión
+    col_t1, col_t2 = st.columns([1, 1])
+    
+    with col_t1:
+        st.markdown("### Clasificación de Tendencias Predictivas")
+        cols_trend = [c for c in ["habilidad", "pendiente", "r2", "porcentaje_actual", "porcentaje_predicho_futuro", "tendencia"] if c in df_trends.columns]
+        st.dataframe(
+            df_trends[cols_trend],
+            use_container_width=True,
+            column_config={
+                "habilidad": "Habilidad",
+                "pendiente": st.column_config.NumberColumn("Tasa de Crecimiento (m)", format="%.3f"),
+                "r2": st.column_config.NumberColumn("R² (confiabilidad)", format="%.3f"),
+                "porcentaje_actual": st.column_config.NumberColumn("Frecuencia Actual (%)", format="%.1f %%"),
+                "porcentaje_predicho_futuro": st.column_config.NumberColumn("Demanda Proyectada (%)", format="%.1f %%"),
+                "tendencia": "Clasificación de Tendencia"
+            }
+        )
+        
+    with col_t2:
+        st.markdown("### Proyección de las 5 Habilidades con Mayor Crecimiento")
+        # Mostrar el top 5 de habilidades emergentes según la pendiente positiva
+        top_emergentes = df_trends[df_trends["pendiente"] > 0].head(5)
+        
+        if len(top_emergentes) > 0:
+            fig_trends = px.bar(
+                top_emergentes,
+                x="habilidad",
+                y="pendiente",
+                color="pendiente",
+                color_continuous_scale="Viridis",
+                labels={"pendiente": "Pendiente de Regresión (Crecimiento)", "habilidad": "Tecnología"},
+                title="Pendiente de Crecimiento del Top Tecnologías Emergentes"
+            )
+            fig_trends.update_layout(
+                height=385, 
+                margin=dict(l=10, r=10, t=40, b=10),
+                modebar=dict(color='#3B82F6', activecolor='#10B981')
+            )
+            st.plotly_chart(fig_trends, use_container_width=True)
+        else:
+            st.info("No se detectaron habilidades emergentes con tendencia positiva en la base de datos actual.")
+
+
+# ---------------------------------------------------------------------
+# Pestaña 4: Conclusiones con IA (Gemini API Integration)
+# ---------------------------------------------------------------------
+with tab_ia:
+    st.subheader("Conclusiones del Mercado IT en Panamá Generadas por Inteligencia Artificial")
+    
+    # Datos condensados para pasar al Prompt
+    top_skills_str = ", ".join(lista_skills_filtradas[:15]) if lista_skills_filtradas else "N/A"
+    categoria_counts = df_filtrado["categoria_rol"].value_counts().to_dict()
+    sal_promedio_general = df_filtrado["salario_max"].mean() if len(df_filtrado) > 0 else 0
+    
+    # Botón para generar conclusiones dinámicas
+    generar_ia = st.button("✨ Generar/Actualizar Informe del Mercado con IA")
+    
+    gemini_key = os.getenv("GEMINI_API_KEY")
+    
+    if generar_ia:
+        with st.spinner("Conectando con el LLM para redactar el informe técnico..."):
+            if gemini_key:
+                try:
+                    import google.generativeai as genai
+                    genai.configure(api_key=gemini_key)
+                    
+                    # Generar la fecha actual dinámicamente en español
+                    meses_es = [
+                        "enero", "febrero", "marzo", "abril", "mayo", "junio", 
+                        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+                    ]
+                    ahora = datetime.now()
+                    fecha_actual = f"{ahora.day} de {meses_es[ahora.month - 1]} de {ahora.year}"
+                    
+                    prompt_analisis = f"""
+                    Como un experto Científico de Datos y Consultor del Mercado Laboral IT en Centroamérica, redacta un informe ejecutivo dirigido a los directivos de la Universidad Tecnológica de Panamá (UTP) analizando la demanda del mercado laboral tecnológico según las estadísticas actuales de nuestra base de datos.
+                    
+                    ESTADÍSTICAS DEL PORTAL:
+                    - Cantidad de vacantes analizadas: {total_ofertas}
+                    - Salario máximo promedio en Panamá: B/. {sal_promedio_max:,.2f}
+                    - Salario mínimo promedio en Panamá: B/. {sal_promedio_min:,.2f}
+                    - Habilidad técnica líder: {top_skill}
+                    - Distribución de vacantes por categorías de rol: {categoria_counts}
+                    - Muestra de habilidades del mercado: {top_skills_str}
+                    
+                    Requisitos del informe y formato:
+                    1. Divide el análisis en 3 secciones: "Diagnóstico del Mercado IT en Panamá", "Brecha de Habilidades en la Academia" y "Recomendaciones Curriculares para la UTP".
+                    2. Sé extremadamente profesional, usa terminología técnica pero legible, y proporciona datos cuantitativos concretos adaptados a Panamá.
+                    3. Mantén un tono optimista sobre las habilidades emergentes pero realista sobre las brechas salariales.
+                    4. Cabecera del informe: Comienza el informe redactando obligatoriamente una cabecera estructurada con exactamente los siguientes campos al principio, sin corchetes ni placeholders:
+                       **Para**: Directivos de la Universidad Tecnológica de Panamá (UTP)
+                       **De**: Analistas del Grupo 4 (FISC-UTP)
+                       **Fecha**: {fecha_actual}
+                       **Asunto**: Análisis de la Demanda del Mercado Laboral IT en Panamá y Recomendaciones Curriculares
+                    5. Formato de Listas y Viñetas: Para listas o puntos clave, utiliza un formato de un solo nivel (sin anidamientos complejos). Escribe listas simples usando un único guion '-' o asterisco '*' al inicio de la línea seguido directamente del texto (ej: `- **Nombre**: Detalle`). Evita dejar líneas vacías entre elementos de la lista y no utilices sub-viñetas o sangrías adicionales, para garantizar la alineación vertical perfecta del texto y los marcadores.
+                    6. Firma final: Firma el reporte de forma profesional indicando únicamente:
+                       
+                       Atentamente,
+                       **Grupo 4 (FISC-UTP)**
+                       
+                       E incluye la lista con viñetas de los integrantes:
+                       - Bryan Law
+                       - Evaristo Alvarez
+                       - Fernando Jimenez
+                       - Manuel Campos
+                       - Diego Gordon
+                    """
+                    
+                    # Probar múltiples modelos por compatibilidad en la nube de Google
+                    modelos_a_probar = ["gemini-3.1-flash-lite", "gemini-2.5-flash-lite", "gemini-3.5-flash", "gemini-3-flash", "gemini-2.5-flash"]
+                    response = None
+                    last_err = None
+                    
+                    for model_name in modelos_a_probar:
+                        try:
+                            model = genai.GenerativeModel(model_name)
+                            response = model.generate_content(prompt_analisis)
+                            if response and response.text:
+                                break
+                        except Exception as e:
+                            last_err = e
+                            continue
+                            
+                    if not response:
+                        raise last_err
+                        
+                    texto_informe = response.text
+                    
+                    st.session_state["informe_ia"] = texto_informe
+                    st.success("¡Informe generado con éxito por Gemini!")
+                except Exception as e:
+                    st.error(f"Error al llamar a Gemini API: {e}. Se mostrará el informe estadístico base.")
+                    st.session_state["informe_ia"] = None
+            else:
+                st.session_state["informe_ia"] = None
+                
+    # Mostrar el informe en pantalla (usar session_state para persistirlo entre interacciones de filtros)
+    if "informe_ia" in st.session_state and st.session_state["informe_ia"] is not None:
+        st.markdown(f"""
+        <div class="insight-box">
+            <h3>📝 Informe Estratégico Generado por IA</h3>
+            <div style="line-height: 1.6; white-space: pre-wrap;">
+{st.session_state["informe_ia"]}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        # Fallback del informe (Generador heurístico estructurado y profesional)
+        st.markdown(f"""
+        <div class="insight-box">
+            <h3>📝 Informe Estadístico de Tendencias IT (Análisis Base FISC-UTP)</h3>
+            <p style="line-height: 1.6;">
+                <b>Diagnóstico del Mercado IT en Panamá:</b><br>
+                El análisis de las <b>{total_ofertas}</b> ofertas de trabajo tecnológicas vigentes en los portales activos revela que la categoría con mayor tracción es 
+                {", ".join([f"<b>{k}</b> ({v} ofertas)" for k,v in list(categoria_counts.items())[:3]])}. 
+                El salario promedio tope se sitúa en un rango aproximado de <b>B/. {sal_promedio_max:,.2f}</b> mensuales. Las habilidades basadas en 
+                desarrollo de software y computación en la nube son las mejor remuneradas en el territorio panameño.
+            </p>
+            <p style="line-height: 1.6;">
+                <b>Brecha de Habilidades en la Academia:</b><br>
+                La tecnología de punta más cotizada actualmente es <b>{top_skill}</b>, la cual está altamente correlacionada con arquitecturas distribuidas y análisis de datos masivos. 
+                Los perfiles requeridos por las corporaciones en Ciudad de Panamá demandan habilidades complementarias en metodologías ágiles (Scrum/Agile) y control de versiones distribuido (Git). 
+                Esto señala la urgencia de fortalecer los laboratorios de desarrollo y las metodologías de proyectos grupales dentro de la carrera.
+            </p>
+            <p style="line-height: 1.6;">
+                <b>Recomendaciones Curriculares para la UTP:</b><br>
+                1. <b>Integración Temprana:</b> Introducir el uso de Git y metodologías Scrum desde los primeros semestres académicos.<br>
+                2. <b>Enfoque en Datos y Cloud:</b> Implementar electivas específicas en Arquitecturas Cloud (AWS/Azure) y Pipelines de Ingesta de Datos (Data Engineering), alineándose con las tecnologías emergentes identificadas en el modelo predictivo.<br>
+                3. <b>Talleres de Habilidades Técnicas:</b> Habilitar bootcamps intensivos sobre tecnologías de frontend moderno como <b>React</b> y backend en <b>Python</b> o <b>Java (Spring Boot)</b>, minimizando la brecha entre los planes de estudio tradicionales y el ecosistema empresarial panameño.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+
+# ---------------------------------------------------------------------
+# Pestaña 5: Chat de Consultas (IA + SQL)
+# ---------------------------------------------------------------------
+with tab_chat:
+    st.subheader("💬 Consulta la Base de Datos en Lenguaje Natural")
+    st.markdown("""
+        Esta sección te permite hacer preguntas directas sobre el mercado laboral IT en Panamá (ej. *'¿Cuáles son las 5 habilidades mejor pagadas en promedio?'* o *'¿Cuál es el salario promedio por categoría de rol?'*).
+        
+        La IA (Gemini) interpretará tu pregunta, generará la consulta SQL correspondiente, la ejecutará sobre la base de datos local SQLite y te presentará los resultados junto con una explicación detallada.
+    """)
+
+    db_path = os.path.join(DATA_PROC_DIR, "laboral_it.db")
+    
+    # Inicializar el estado de mensajes del chat
+    if "chat_history" not in st.session_state:
+        st.session_state["chat_history"] = []
+
+    # Mostrar historial de mensajes
+    for msg in st.session_state["chat_history"]:
+        with st.chat_message(msg["role"]):
+            st.write(msg["content"])
+            if "df_result" in msg and msg["df_result"] is not None:
+                st.dataframe(msg["df_result"])
+            if "sql_query" in msg and msg["sql_query"]:
+                with st.expander("Ver consulta SQL generada"):
+                    st.code(msg["sql_query"], language="sql")
+
+    # Entrada de pregunta
+    pregunta = st.chat_input("Escribe tu pregunta sobre las vacantes aquí...")
+
+    if pregunta:
+        # Mostrar la pregunta inmediatamente en pantalla
+        st.session_state["chat_history"].append({"role": "user", "content": pregunta})
+        # Forzar recarga para que se dibuje el mensaje del usuario antes de que responda la IA
+        st.rerun()
+
+    # Si hay una pregunta recién ingresada que no tiene respuesta de la IA
+    if st.session_state["chat_history"] and st.session_state["chat_history"][-1]["role"] == "user":
+        pregunta_pendiente = st.session_state["chat_history"][-1]["content"]
+        
+        with st.chat_message("assistant"):
+            if not gemini_key:
+                st.error("🔑 No se encontró la API Key de Gemini (`GEMINI_API_KEY`) en el entorno o archivo `.env`. Esta funcionalidad requiere la clave de API activa.")
+            else:
+                with st.spinner("Generando consulta SQL..."):
+                    try:
+                        import google.generativeai as genai
+                        import sqlite3
+                        import re
+                        
+                        genai.configure(api_key=gemini_key)
+                        
+                        # Prompt 1: Pregunta -> SQL
+                        prompt_sql = f"""
+                        Eres un experto en bases de datos SQLite y analista de datos. Tu tarea es generar una consulta SQL limpia y válida que responda a la pregunta del usuario sobre las vacantes de empleo tecnológico.
+                        
+                        El esquema de la base de datos SQLite contiene las siguientes tablas y columnas:
+                        
+                        1. Tabla 'vacantes':
+                           - id (INTEGER, Primary Key)
+                           - titulo_original (TEXT)
+                           - puesto (TEXT) - Puesto de trabajo limpio
+                           - empresa (TEXT)
+                           - portal (TEXT)
+                           - fecha_publicacion (DATE)
+                           - salario_min (REAL)
+                           - salario_max (REAL)
+                           - experiencia_anios (INTEGER)
+                           - categoria_rol (TEXT)
+                           - descripcion (TEXT)
+                           - es_simulado (INTEGER) - 0 para vacantes reales de scraping/API, 1 para simuladas
+                        
+                        2. Tabla 'habilidades':
+                           - id (INTEGER, Primary Key)
+                           - nombre (TEXT) - Nombre de la tecnología o habilidad
+                        
+                        3. Tabla 'vacante_habilidad' (Tabla intermedia Many-to-Many):
+                           - vacante_id (INTEGER, Foreign Key a vacantes.id)
+                           - habilidad_id (INTEGER, Foreign Key a habilidades.id)
+                        
+                        Reglas estrictas para la consulta SQL:
+                        1. Genera únicamente una consulta SELECT. No modifiques la base de datos.
+                        2. Si el usuario te pregunta por salarios, usa la columna 'salario_max' o 'salario_min'. Si están en 0 o nulos, ignóralos ('WHERE salario_max > 0').
+                        3. Para filtrar habilidades, haz un JOIN entre 'vacantes', 'vacante_habilidad' y 'habilidades'.
+                        4. Para búsquedas parciales de texto, usa 'LIKE %texto%'.
+                        5. Limita los resultados a un número razonable (ej. 'LIMIT 10' o 'LIMIT 20') a menos que se pidan totales.
+                        6. Devuelve EXCLUSIVAMENTE el código SQL dentro de un bloque markdown ```sql ... ```. No escribas texto explicativo antes ni después de la consulta.
+                        7. Para búsquedas geográficas relacionadas con 'Panamá', usa siempre 'LIKE %Panam%' (sin la letra final 'á' o 'a') para evitar fallas de codificación de caracteres en SQLite.
+                        
+                        Pregunta del usuario: "{pregunta_pendiente}"
+                        """
+                        
+                        modelos_a_probar = ["gemini-3.1-flash-lite", "gemini-2.5-flash-lite", "gemini-3.5-flash", "gemini-3-flash", "gemini-2.5-flash"]
+                        sql_code = ""
+                        last_err = None
+                        
+                        for m_name in modelos_a_probar:
+                            try:
+                                model = genai.GenerativeModel(m_name)
+                                response = model.generate_content(prompt_sql)
+                                if response and response.text:
+                                    sql_code = response.text
+                                    break
+                            except Exception as e:
+                                last_err = e
+                                continue
+                        
+                        if not sql_code:
+                            raise last_err
+                            
+                        # Limpiar y extraer la consulta SQL del bloque markdown
+                        sql_match = re.search(r"```sql(.*?)```", sql_code, re.DOTALL)
+                        if sql_match:
+                            query = sql_match.group(1).strip()
+                        else:
+                            query = sql_code.strip()
+                            # Eliminar cualquier prefijo ```sql si quedó suelto
+                            query = re.sub(r"^```sql", "", query, flags=re.IGNORECASE)
+                            query = re.sub(r"```$", "", query).strip()
+                        
+                        # Validación de seguridad básica
+                        if not query.upper().strip().startswith("SELECT"):
+                            raise ValueError("Por razones de seguridad, solo se permiten consultas SELECT.")
+                            
+                        with st.spinner("Ejecutando consulta sobre SQLite..."):
+                            # Conectar a SQLite y ejecutar la consulta
+                            conn = sqlite3.connect(db_path)
+                            df_res = pd.read_sql_query(query, conn)
+                            conn.close()
+                        
+                        with st.spinner("Redactando respuesta explicativa..."):
+                            # Prompt 2: SQL + Resultados -> Explicación en lenguaje natural
+                            prompt_explicacion = f"""
+                            Eres un analista de datos experto del mercado laboral IT en Panamá. Tu objetivo es explicar los resultados de una consulta SQL de forma clara, amigable y profesional a un estudiante o directivo de la Universidad Tecnológica de Panamá.
+                            
+                            Pregunta original: "{pregunta_pendiente}"
+                            Consulta SQL ejecutada:
+                            ```sql
+                            {query}
+                            ```
+                            
+                            Resultados de la consulta (primeras 20 filas):
+                            {df_res.head(20).to_string()}
+                            
+                            Redacta una respuesta concisa pero completa que resuma y analice estos resultados en el contexto de Panamá. Si la consulta no arrojó resultados, explícalo de forma amable sugiriendo otras formas de buscar.
+                            """
+                            
+                            respuesta_ia = ""
+                            for m_name in modelos_a_probar:
+                                try:
+                                    model = genai.GenerativeModel(m_name)
+                                    response_explain = model.generate_content(prompt_explicacion)
+                                    if response_explain and response_explain.text:
+                                        respuesta_ia = response_explain.text
+                                        break
+                                except Exception as e:
+                                    last_err = e
+                                    continue
+                                    
+                            if not respuesta_ia:
+                                raise last_err
+                        
+                        # Mostrar el resultado en el chat
+                        st.write(respuesta_ia)
+                        st.dataframe(df_res)
+                        with st.expander("Ver consulta SQL generada"):
+                            st.code(query, language="sql")
+                            
+                        # Guardar la respuesta del asistente en el historial
+                        st.session_state["chat_history"].append({
+                            "role": "assistant",
+                            "content": respuesta_ia,
+                            "df_result": df_res,
+                            "sql_query": query
+                        })
+                        st.rerun()
+                        
+                    except Exception as ex:
+                        st.error(f"Error al procesar la consulta: {ex}")
+                        # Eliminar la última pregunta fallida para evitar bucles infinitos
+                        st.session_state["chat_history"].pop()

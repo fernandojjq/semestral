@@ -1,0 +1,34 @@
+table Dim_Clusters
+	lineageTag: 47b2ad49-41f8-479d-bf6e-a46b5605fbcb
+
+	column ID_Cluster
+		dataType: int64
+		formatString: 0
+		lineageTag: 5de335f8-ac3a-4068-b76b-6b6c0ae9f1a5
+		summarizeBy: none
+		sourceColumn: ID_Cluster
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nombre_Cluster
+		dataType: string
+		lineageTag: 5eb62e04-679c-45fc-a9bf-582fe1e4661b
+		summarizeBy: none
+		sourceColumn: Nombre_Cluster
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Clusters = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("D:\Downloads\Gestion informacion\data\processed\modelo_estrella\Dim_Clusters.csv"),[Delimiter=",", Columns=2, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Cluster", Int64.Type}, {"Nombre_Cluster", type text}})
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

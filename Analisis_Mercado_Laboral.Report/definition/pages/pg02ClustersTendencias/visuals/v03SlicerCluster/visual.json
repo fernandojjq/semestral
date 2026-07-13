@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "v03SlicerCluster",
+  "position": {
+    "x": 630,
+    "y": 40,
+    "z": 1002,
+    "width": 280,
+    "height": 130,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Clusters"
+                    }
+                  },
+                  "Property": "Nombre_Cluster"
+                }
+              },
+              "queryRef": "Dim_Clusters.Nombre_Cluster",
+              "nativeQueryRef": "Nombre_Cluster"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

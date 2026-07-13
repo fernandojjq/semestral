@@ -1,0 +1,76 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "v01KpiTotalVacantes",
+  "position": {
+    "x": 30,
+    "y": 40,
+    "z": 1000,
+    "width": 280,
+    "height": 130,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "objects": {
+      "cards": [
+        {
+          "properties": {
+            "showLabel": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "value": [
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            },
+            "labelPrecision": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Medidas.Total de Vacantes"
+          }
+        }
+      ]
+    },
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas"
+                    }
+                  },
+                  "Property": "Total de Vacantes"
+                }
+              },
+              "queryRef": "Medidas.Total de Vacantes",
+              "nativeQueryRef": "Total de Vacantes"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,44 @@
+table Dim_Puestos
+	lineageTag: 0fad0eb3-2785-4a73-a818-ff1ef3ab429c
+
+	column ID_Puesto
+		dataType: int64
+		formatString: 0
+		lineageTag: e1d190fc-3c1e-493d-95bc-dda0f687813b
+		summarizeBy: none
+		sourceColumn: ID_Puesto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nombre_Puesto
+		dataType: string
+		lineageTag: 1883281d-e3a7-4573-be83-e3ba8aaaa2d3
+		summarizeBy: none
+		sourceColumn: Nombre_Puesto
+
+		annotation SummarizationSetBy = Automatic
+
+	column categoria_rol
+		dataType: string
+		lineageTag: c8b990c8-5e45-4790-b89a-d7d22762d1a6
+		summarizeBy: none
+		sourceColumn: categoria_rol
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Puestos = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("D:\Downloads\Gestion informacion\data\processed\modelo_estrella\Dim_Puestos.csv"),[Delimiter=",", Columns=3, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Puesto", Int64.Type}, {"Nombre_Puesto", type text}, {"categoria_rol", type text}}),
+				    #"Limpiar Texto Categoria" = Table.TransformColumns(#"Tipo cambiado",{{"categoria_rol", Text.Trim, type text}}),
+				    #"Categoria en Mayusculas" = Table.TransformColumns(#"Limpiar Texto Categoria",{{"categoria_rol", Text.Upper, type text}})
+				in
+				    #"Categoria en Mayusculas"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

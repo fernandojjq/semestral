@@ -1,0 +1,34 @@
+table Dim_Empresas
+	lineageTag: 337c6a05-3787-40cb-8992-ca325ce56db6
+
+	column ID_Empresa
+		dataType: int64
+		formatString: 0
+		lineageTag: 920ebea9-00aa-476c-aaad-3c09a621d23a
+		summarizeBy: none
+		sourceColumn: ID_Empresa
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nombre_Empresa
+		dataType: string
+		lineageTag: ef6a0db8-e1d3-49da-af39-fbfdca149d7a
+		summarizeBy: none
+		sourceColumn: Nombre_Empresa
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Empresas = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("D:\Downloads\Gestion informacion\data\processed\modelo_estrella\Dim_Empresas.csv"),[Delimiter=",", Columns=2, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Empresa", Int64.Type}, {"Nombre_Empresa", type text}})
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "v07TableHabilidades",
+  "position": {
+    "x": 880,
+    "y": 190,
+    "z": 2002,
+    "width": 370,
+    "height": 480,
+    "tabOrder": 6
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Clusters"
+                    }
+                  },
+                  "Property": "Nombre_Cluster"
+                }
+              },
+              "queryRef": "Dim_Clusters.Nombre_Cluster",
+              "nativeQueryRef": "Nombre_Cluster"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Habilidades"
+                    }
+                  },
+                  "Property": "Nombre_Habilidad"
+                }
+              },
+              "queryRef": "Dim_Habilidades.Nombre_Habilidad",
+              "nativeQueryRef": "Nombre_Habilidad"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Medidas"
+                    }
+                  },
+                  "Property": "Total de Vacantes"
+                }
+              },
+              "queryRef": "Medidas.Total de Vacantes",
+              "nativeQueryRef": "Total de Vacantes"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

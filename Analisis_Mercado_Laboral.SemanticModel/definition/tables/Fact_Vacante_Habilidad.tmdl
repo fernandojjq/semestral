@@ -1,0 +1,35 @@
+table Fact_Vacante_Habilidad
+	lineageTag: 2af1bbd5-077c-4881-8dc6-f529be5e5a7c
+
+	column ID_Vacante
+		dataType: int64
+		formatString: 0
+		lineageTag: 7af022d1-7c7f-406c-9223-e13ee4f02175
+		summarizeBy: none
+		sourceColumn: ID_Vacante
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID_Habilidad
+		dataType: int64
+		formatString: 0
+		lineageTag: 4c69092b-4ac8-4db4-a6bb-53bb4faf8dfc
+		summarizeBy: none
+		sourceColumn: ID_Habilidad
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Vacante_Habilidad = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("D:\Downloads\Gestion informacion\data\processed\modelo_estrella\Fact_Vacante_Habilidad.csv"),[Delimiter=",", Columns=2, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Vacante", Int64.Type}, {"ID_Habilidad", Int64.Type}})
+				in
+				    #"Tipo cambiado"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

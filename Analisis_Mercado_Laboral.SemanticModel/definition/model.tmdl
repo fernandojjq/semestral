@@ -1,0 +1,30 @@
+model Model
+	culture: es-MX
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-MX
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Dim_Clusters","Dim_Empresas","Dim_Fecha","Dim_Habilidades","Dim_Portales","Dim_Puestos","Fact_Vacante_Habilidad","Fact_Vacantes"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Dim_Clusters
+ref table Dim_Empresas
+ref table Dim_Fecha
+ref table DateTableTemplate_4de782b0-3c58-40a5-a218-2bd143f41f51
+ref table LocalDateTable_bde6647c-e106-4685-bc96-466342e08f23
+ref table LocalDateTable_c9ea6214-5d24-4355-9d39-0184c25ac9f0
+ref table Dim_Habilidades
+ref table Dim_Portales
+ref table Dim_Puestos
+ref table Fact_Vacante_Habilidad
+ref table Fact_Vacantes
+ref table LocalDateTable_27b4f582-1d40-45e5-ae8b-7566eff08342
+ref table Medidas
+
+ref cultureInfo es-MX
+

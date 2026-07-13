@@ -1,0 +1,156 @@
+table Fact_Vacantes
+	lineageTag: 1a2dde04-7f38-4b90-b5dc-012d824ee09e
+
+	column ID_Vacante
+		dataType: int64
+		formatString: 0
+		lineageTag: 9a577899-2694-4f62-b24c-cf7459cdda5b
+		summarizeBy: none
+		sourceColumn: ID_Vacante
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID_Empresa
+		dataType: int64
+		formatString: 0
+		lineageTag: a8bcb1b5-ae4d-4981-806e-12ee24748e5e
+		summarizeBy: none
+		sourceColumn: ID_Empresa
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID_Portal
+		dataType: int64
+		formatString: 0
+		lineageTag: 3e115092-2887-45b0-8c8f-57fdef2908d1
+		summarizeBy: none
+		sourceColumn: ID_Portal
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID_Puesto
+		dataType: int64
+		formatString: 0
+		lineageTag: 201887a2-54f2-4139-a795-c7389c8dc944
+		summarizeBy: none
+		sourceColumn: ID_Puesto
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID_Cluster
+		dataType: int64
+		formatString: 0
+		lineageTag: 4ce28b76-bd47-494c-a274-3b2c6c5a43fb
+		summarizeBy: none
+		sourceColumn: ID_Cluster
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID_Fecha
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 4a5a337c-59d5-4a6f-b8d8-5f1a8ee65ae5
+		summarizeBy: none
+		sourceColumn: ID_Fecha
+
+		variation Variación
+			isDefault
+			relationship: b379c270-1e83-4f57-adbb-2d4338f669c3
+			defaultHierarchy: LocalDateTable_27b4f582-1d40-45e5-ae8b-7566eff08342.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Salario_Min
+		dataType: double
+		lineageTag: 60f5373c-cebb-47b3-9f06-2df6f41baaa9
+		summarizeBy: average
+		sourceColumn: Salario_Min
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Salario_Max
+		dataType: double
+		lineageTag: ef1b1921-05f7-4cb0-a977-7d6e77c37943
+		summarizeBy: average
+		sourceColumn: Salario_Max
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Salario_Medio
+		dataType: double
+		lineageTag: 2af0d946-d059-4f6f-9d49-d70f520b6fe6
+		summarizeBy: average
+		sourceColumn: Salario_Medio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Experiencia_Anios
+		dataType: int64
+		formatString: 0
+		lineageTag: fedcb8ef-8f13-4cd8-b7dd-9029e30611d7
+		summarizeBy: average
+		sourceColumn: Experiencia_Anios
+
+		annotation SummarizationSetBy = Automatic
+
+	column Es_Simulado
+		dataType: int64
+		formatString: 0
+		lineageTag: ddf32801-2403-4520-9132-1cd8c051bc0d
+		summarizeBy: sum
+		sourceColumn: Es_Simulado
+
+		annotation SummarizationSetBy = Automatic
+
+	column PCA_X
+		dataType: double
+		lineageTag: d5f5df24-79db-446e-9dd2-598e4416071a
+		summarizeBy: sum
+		sourceColumn: PCA_X
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PCA_Y
+		dataType: double
+		lineageTag: 5b2bfc6d-66d2-488c-a8e8-2b42c39e26bc
+		summarizeBy: sum
+		sourceColumn: PCA_Y
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Nivel_Salarial
+		dataType: string
+		lineageTag: 1f4e94f2-70dc-4b38-a978-37c4ec82b7e5
+		summarizeBy: none
+		sourceColumn: Nivel_Salarial
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Vacantes = m
+		mode: import
+		source =
+				let
+				    Origen = Csv.Document(File.Contents("D:\Downloads\Gestion informacion\data\processed\modelo_estrella\Fact_Vacantes.csv"),[Delimiter=",", Columns=13, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Encabezados promovidos" = Table.PromoteHeaders(Origen, [PromoteAllScalars=true]),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"ID_Vacante", Int64.Type}, {"ID_Empresa", Int64.Type}, {"ID_Portal", Int64.Type}, {"ID_Puesto", Int64.Type}, {"ID_Cluster", Int64.Type}, {"Experiencia_Anios", Int64.Type}, {"Es_Simulado", Int64.Type}}),
+				    #"Tipo cambiado decimales" = Table.TransformColumnTypes(#"Tipo cambiado",{{"Salario_Min", type number}, {"Salario_Max", type number}, {"Salario_Medio", type number}, {"PCA_X", type number}, {"PCA_Y", type number}, {"ID_Fecha", type date}}, "en-US"),
+				    #"Nivel Salarial Condicional" = Table.AddColumn(#"Tipo cambiado decimales", "Nivel_Salarial", each if [Salario_Medio] >= 3000 then "Alto" else if [Salario_Medio] >= 1800 then "Medio" else "Bajo", type text)
+				in
+				    #"Nivel Salarial Condicional"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

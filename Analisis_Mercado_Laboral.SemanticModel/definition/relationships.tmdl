@@ -1,0 +1,44 @@
+relationship 9ccf369e-232f-4280-9a2a-53d3f4290a04
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dim_Fecha.ID_Fecha
+	toColumn: LocalDateTable_bde6647c-e106-4685-bc96-466342e08f23.Date
+
+relationship ad27e57d-b12a-493c-b40a-6095e0ab55d7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dim_Fecha.Fecha
+	toColumn: LocalDateTable_c9ea6214-5d24-4355-9d39-0184c25ac9f0.Date
+
+relationship b379c270-1e83-4f57-adbb-2d4338f669c3
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Fact_Vacantes.ID_Fecha
+	toColumn: LocalDateTable_27b4f582-1d40-45e5-ae8b-7566eff08342.Date
+
+relationship AutoDetected_859e46f5-12b0-4032-9a7a-adc4b068bfa7
+	fromColumn: Fact_Vacantes.ID_Cluster
+	toColumn: Dim_Clusters.ID_Cluster
+
+relationship AutoDetected_b0655fb0-73b6-4b15-9389-53ceba4327a7
+	fromColumn: Fact_Vacantes.ID_Empresa
+	toColumn: Dim_Empresas.ID_Empresa
+
+relationship AutoDetected_15548de6-3d5c-4781-bb6f-049cb8caa114
+	fromColumn: Fact_Vacante_Habilidad.ID_Habilidad
+	toColumn: Dim_Habilidades.ID_Habilidad
+
+relationship AutoDetected_fe06ab37-9cd3-404b-bc58-dccb18217508
+	fromColumn: Fact_Vacantes.ID_Portal
+	toColumn: Dim_Portales.ID_Portal
+
+relationship AutoDetected_513cc50e-e7f1-4635-b130-b6e09a65aa1d
+	fromColumn: Fact_Vacantes.ID_Puesto
+	toColumn: Dim_Puestos.ID_Puesto
+
+relationship AutoDetected_22a59a5a-151b-4ecc-859f-73bf5ad2d654
+	crossFilteringBehavior: bothDirections
+	fromColumn: Fact_Vacante_Habilidad.ID_Vacante
+	toColumn: Fact_Vacantes.ID_Vacante
+
+relationship 3334619c-1b86-46af-903f-c87e30a43fa5
+	fromColumn: Fact_Vacantes.ID_Fecha
+	toColumn: Dim_Fecha.ID_Fecha
+
