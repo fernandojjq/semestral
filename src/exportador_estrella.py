@@ -112,9 +112,9 @@ def generar_modelo_estrella():
     fact_vacantes["ID_Fecha"] = df["fecha_publicacion"].dt.strftime("%Y-%m-%d")
     
     # Métricas y dimensiones de hechos
-    fact_vacantes["Salario_Min"] = df["salario_min"].round().astype(int)
-    fact_vacantes["Salario_Max"] = df["salario_max"].round().astype(int)
-    fact_vacantes["Salario_Medio"] = ((df["salario_min"] + df["salario_max"]) / 2).round().astype(int)
+    fact_vacantes["Salario_Min"] = df["salario_min"]
+    fact_vacantes["Salario_Max"] = df["salario_max"]
+    fact_vacantes["Salario_Medio"] = (df["salario_min"] + df["salario_max"]) / 2
     fact_vacantes["Experiencia_Anios"] = df["experiencia_anios"].round().astype(int)
     fact_vacantes["Es_Simulado"] = df["es_simulado"].astype(int)
     fact_vacantes["PCA_X"] = df["pca_x"]

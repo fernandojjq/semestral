@@ -3,240 +3,235 @@
 2,3D Geometry
 3,AI
 4,AI Agents
-5,AI Platforms
-6,AI Software Engineering
-7,AS
-8,AWS
-9,Agentic Systems
-10,Agile
-11,Allure
-12,Angular
-13,Arista
-14,Artificial Intelligence
-15,Atlassian
-16,Audit Management
-17,Automatisierung
-18,Automatisierungstechnik
-19,Autonomous Mobile Robots
-20,Azure
-21,Backbone networks
-22,Backend Testing
-23,Budget Management
-24,Business Analyse
-25,Business Planning
-26,Business Process Automation
-27,C#
-28,C++
-29,CAD
-30,CI/CD
-31,CMake
-32,CSS
-33,CYBER SECURITY
-34,Cisco
-35,Cloud
+5,AI Software Engineering
+6,AI Voice Agents
+7,AWS
+8,Aditivos químicos
+9,Agentic AI
+10,Agentic Systems
+11,Agile
+12,Allure
+13,Anforderungsanalyse
+14,Angular
+15,Análisis de errores
+16,Arista
+17,Artificial Intelligence
+18,Atlassian Suite
+19,Audit Management
+20,Automatisierung
+21,Automatización
+22,Autonomous Systems
+23,Azure
+24,Backbone-Infrastrukturen
+25,Backend
+26,Blockchain
+27,Business Analysis
+28,Business Planning
+29,C
+30,C#
+31,C++
+32,CAD
+33,CMake
+34,CSS
+35,Cisco
 36,Cloud Computing
 37,Cloud Infrastructure
 38,Cloud Migration
 39,Cloud Native
 40,Cloud Services
 41,Cloud-Infrastrukturen
-42,Cloud-Services
-43,Competitive Analysis
-44,Computer Vision
-45,Confluence
-46,Copilot
-47,Cucumber
+42,Competitive Analysis
+43,Computer Vision
+44,Confluence
+45,Copilot
+46,Cucumber
+47,Cyber Security
 48,Cybersecurity
-49,Data Labeling
-50,Data Processing
-51,Data Products
-52,Data Warehousing
-53,Data center networks
-54,Data-driven Marketing
-55,Datacenter Services
-56,Deep Learning
-57,Dell
-58,Deployment
-59,Desktop Applications
-60,DevOps
-61,Diagnóstico de equipos
-62,Docker
-63,Dokumentenautomatisierung
-64,Dokumentenmanagement
-65,E-commerce
-66,ETL
-67,Embedded Software Development
-68,Embedded Systems
-69,Energy Management Systems
-70,Enterprise Performance Management
-71,Excel
-72,Financial Modeling
-73,Financing
-74,Finanzanalyse
-75,Fiori Elements
-76,Flottenmanagement
-77,Flutter
-78,Forge
-79,Frontend Development
-80,Frontend Testing
-81,Fullstack-Entwicklung
-82,Generative AI
-83,Git
-84,Go
-85,Google Workspace
-86,Groovy
-87,HTML
-88,IREB-Methodik
-89,IT Infrastructure
-90,IT Security
-91,IT-FORENSICS
-92,IT-Projektmanagement
-93,IT-Sicherheit
-94,Identity & Access Management
-95,Implementierung
-96,Industry Analysis
-97,Infrastruktur als Code
-98,Instandhaltung
-99,Investment
-100,Java
-101,JavaScript
-102,Jira
-103,Jira Service Management
-104,Juniper
-105,KI
-106,KI-Lösungen
-107,KI-Skills
-108,KRISENMANAGEMENT
-109,Kafka
-110,Keycloak
-111,Knowledge Graphs
-112,Kotlin
-113,Kubernetes
-114,LLM
-115,LLM Agents
-116,LLMs
-117,Large Language Models
-118,License Optimization
-119,Linux
-120,ML systems
-121,MSBuild
-122,MSVC v141
-123,Machine Learning
-124,Mantenimiento HVAC
-125,Market Analysis
-126,Marketing
-127,Marketing Tech
-128,Medical Software Development
-129,Microsoft 365
-130,Microsoft AI
-131,Microsoft Cloud
-132,Microsoft Licensing
-133,Model Serving
-134,Model Training
-135,NLP
-136,Node.js
-137,OT-Sicherheit
-138,Object Detection
-139,Obstacle Classification
-140,One Identity Manager
-141,Ontologies
-142,Open Source
-143,Peering
-144,PostgreSQL
-145,Power BI
-146,Product Marketing
-147,Projektmanagement
-148,Projektplanung
-149,Python
-150,Qt
-151,Qualitätssicherung
-152,R
-153,RAG
-154,REST
-155,ROS
-156,ROS2
-157,React
-158,React Native
-159,Recovery Systems
-160,S/4HANA
-161,SAP
-162,SAP BTP
-163,SAP Build Apps
-164,SAP Cloud Application Programming Model (CAP)
-165,SAP Data & Analytics
-166,SAP Datasphere
-167,SAP MaKo Cloud
-168,SAP UI5
-169,SAP Utilities
-170,SECURITY INCIDENT RESPONSE
-171,SQL
-172,SSIS
-173,SaaS
-174,Schema-based management systems
-175,ScriptRunner
-176,Scrum
-177,Shopware
-178,Sim2Real
-179,Sistemas de climatización
-180,Software
-181,Software Architecture
-182,Software Asset Management
-183,Software Compliance
-184,Software Development
-185,Software Engineering
-186,Software Testing
-187,Softwareentwicklung
-188,Softwaretest
-189,Spark
-190,Speech-To-Text
+49,DWH
+50,Data
+51,Data Extraction
+52,Debugging
+53,Deep Learning
+54,Dell
+55,Deployment
+56,DevOps
+57,Docker
+58,ETL
+59,Embedded Software Development
+60,Embedded Systems
+61,Enterprise Software
+62,Excel
+63,Fehleranalyse
+64,Financial Modeling
+65,Financing
+66,Finanzanalyse
+67,Fine-tuning
+68,Fiori Elements
+69,Flutter
+70,Forge
+71,Frontend
+72,Frontend Development
+73,Fullstack development
+74,Git
+75,Go
+76,Google Workspace
+77,Groovy
+78,HTML
+79,Hydraulic engineering
+80,IREB
+81,IT Security
+82,IT-Betrieb
+83,IT-Forensik
+84,IT-Sicherheit
+85,Implementación de software
+86,Industry Analysis
+87,Infrastruktur als Code (IaC)
+88,Investment
+89,Java
+90,JavaScript
+91,Jira
+92,Jira Service Management
+93,Juniper
+94,KI
+95,Kafka
+96,Knowledge Graphs
+97,Kotlin
+98,Krisenmanagement
+99,Kubernetes
+100,LLM
+101,LLM Agents
+102,LLMs
+103,Large Language Models
+104,Latenzoptimierung
+105,License Optimization
+106,Linux
+107,Low-latency deployment
+108,MLOps
+109,MSBuild
+110,MSVC v141
+111,Machine Learning
+112,Mantenimiento correctivo
+113,Mantenimiento de software
+114,Mantenimiento preventivo
+115,Market Analysis
+116,Marketing
+117,Mechanical engineering
+118,Microsoft 365
+119,Microsoft AI
+120,Microsoft Cloud
+121,Microsoft Licensing
+122,Model Training
+123,Model deployment
+124,Model training
+125,Modellierung
+126,NLP
+127,Netzwerk-Infrastruktur
+128,Node.js
+129,OT-Sicherheit
+130,Object Detection
+131,Ontologies
+132,Open Source
+133,Physics
+134,PostgreSQL
+135,Power BI
+136,Process Optimization
+137,Product Management
+138,Product Marketing
+139,Projektmanagement
+140,Prototyping
+141,Prozessautomatisierung
+142,Pruebas de software
+143,Python
+144,Qt
+145,Qualitätssicherung
+146,R
+147,R&D
+148,RAG
+149,REST
+150,ROS
+151,ROS2
+152,React
+153,React Native
+154,Real-time streaming inference
+155,Recovery Systems
+156,Reparación de equipos de climatización
+157,Requirements Engineering
+158,Risk Management Systems
+159,S/4HANA
+160,SAP
+161,SAP BTP
+162,SAP Build Apps
+163,SAP Cloud Application Programming Model
+164,SAP Data & Analytics
+165,SAP Datasphere
+166,SAP MaKo Cloud
+167,SAP UI5
+168,SAP Utilities
+169,SQL
+170,SSIS
+171,SaaS
+172,ScriptRunner
+173,Scrum
+174,Security Incident Response
+175,Shopware
+176,Sim2Real
+177,Simulation
+178,Sistemas HVAC
+179,Software Architecture
+180,Software Asset Management
+181,Software Development
+182,Software Engineering
+183,Software Implementierung
+184,Software Testing
+185,Software engineering
+186,Softwareentwicklung
+187,Soporte técnico
+188,Spark
+189,Speech-To-Text
+190,Speech-to-Text (STT)
 191,Spring Boot
-192,SvelteKit
-193,Swift
-194,Synthetic Data
-195,System Architecture
-196,Systemoptimierung
-197,Tableau
-198,Terraform
-199,Testautomatisierung
-200,Text-To-Speech
-201,Ticketsystem
-202,Toolchain Integration
-203,TouchDesigner
-204,Tricentis
-205,TypeScript
-206,UML
-207,Valuation
-208,Visual Studio 2017
-209,Vue
-210,Wasserfall
-211,Windows
-212,Windows Server
-213,Xray
-214,aditivos químicos
-215,battery storage systems
-216,cloud software
-217,cámaras de seguridad
-218,deep learning
-219,electrical engineering
-220,excavación
-221,firmware
-222,gestión de productos químicos
-223,hydraulic engineering
-224,instalación de aire acondicionado
-225,low latency optimization
-226,manejo de maquinaria pesada
-227,mantenimiento de refrigeración
-228,mechanical engineering
-229,physics engineering
-230,power electronics
-231,power plants
+192,Streaming-Inferenz
+193,SvelteKit
+194,Swift
+195,Synthetic Data
+196,System Architecture
+197,System Development
+198,Tableau
+199,Technische Spezifikationen
+200,Terraform
+201,Test Automation
+202,Testfallerstellung
+203,Testplanung
+204,Text-To-Speech
+205,Text-to-Speech (TTS)
+206,Toolchain Integration
+207,TouchDesigner
+208,Tricentis
+209,TypeScript
+210,UML
+211,UX
+212,Valuation
+213,Visual Studio 2017
+214,Vue
+215,Wasserfall
+216,Web Development
+217,Windows
+218,Windows Desktop Development
+219,Windows Server
+220,Xray
+221,battery storage systems
+222,budget steering
+223,cloud software
+224,cámaras de seguridad
+225,data products
+226,deep learning
+227,firmware
+228,instalación de aires acondicionados
+229,mantenimiento de refrigeración
+230,marketing analytics
+231,power electronics
 232,redes
-233,renewable energy systems
-234,reparación de sistemas HVAC
-235,sistemas de refrigeración de contenedores
-236,sistemas de sonido
-237,software engineering
-238,soporte técnico
-239,streaming inference
-240,systems integration
-241,wifi
+233,reparación de sistemas de climatización
+234,sistemas de sonido
+235,systems integration
+236,wifi

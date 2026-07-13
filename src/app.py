@@ -234,10 +234,12 @@ if df_jobs is None or df_trends is None:
                 # Ejecutar pipeline y modelo programáticamente
                 from pipeline import ejecutar_pipeline
                 from modelo import ejecutar_modelado
+                from exportador_estrella import generar_modelo_estrella
 
-                # Flujo "real primero, simulado de respaldo"
+                # Flujo de datos reales y simulados de respaldo
                 ejecutar_pipeline(num_simulados=200)
                 ejecutar_modelado()
+                generar_modelo_estrella()
                 
                 st.success("🎉 ¡Proceso finalizado con éxito! Cargando el Dashboard...")
                 st.rerun()
@@ -848,7 +850,7 @@ with tab_ia:
 with tab_chat:
     st.subheader("💬 Consulta la Base de Datos en Lenguaje Natural")
     st.markdown("""
-        Esta sección te permite hacer preguntas directas sobre el mercado laboral IT en Panamá (ej. *'¿Cuáles son las 5 habilidades mejor pagadas en promedio?'* o *'¿Cuántas vacantes piden Python en Panamá?'*).
+        Esta sección te permite hacer preguntas directas sobre el mercado laboral IT en Panamá (ej. *'¿Cuáles son las 5 habilidades mejor pagadas en promedio?'* o *'¿Cuál es el salario promedio por categoría de rol?'*).
         
         La IA (Gemini) interpretará tu pregunta, generará la consulta SQL correspondiente, la ejecutará sobre la base de datos local SQLite y te presentará los resultados junto con una explicación detallada.
     """)
