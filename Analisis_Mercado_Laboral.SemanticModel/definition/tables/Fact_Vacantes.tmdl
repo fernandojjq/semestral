@@ -53,10 +53,7 @@ table Fact_Vacantes
 		summarizeBy: none
 		sourceColumn: ID_Fecha
 
-		variation Variación
-			isDefault
-			relationship: b379c270-1e83-4f57-adbb-2d4338f669c3
-			defaultHierarchy: LocalDateTable_27b4f582-1d40-45e5-ae8b-7566eff08342.'Jerarquía de fechas'
+
 
 		annotation SummarizationSetBy = Automatic
 

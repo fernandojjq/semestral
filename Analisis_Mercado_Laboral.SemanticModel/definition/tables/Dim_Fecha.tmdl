@@ -8,10 +8,7 @@ table Dim_Fecha
 		summarizeBy: none
 		sourceColumn: ID_Fecha
 
-		variation Variación
-			isDefault
-			relationship: 9ccf369e-232f-4280-9a2a-53d3f4290a04
-			defaultHierarchy: LocalDateTable_bde6647c-e106-4685-bc96-466342e08f23.'Jerarquía de fechas'
+
 
 		annotation SummarizationSetBy = Automatic
 
@@ -24,10 +21,7 @@ table Dim_Fecha
 		summarizeBy: none
 		sourceColumn: Fecha
 
-		variation Variación
-			isDefault
-			relationship: ad27e57d-b12a-493c-b40a-6095e0ab55d7
-			defaultHierarchy: LocalDateTable_c9ea6214-5d24-4355-9d39-0184c25ac9f0.'Jerarquía de fechas'
+
 
 		annotation SummarizationSetBy = Automatic
 

@@ -1,17 +1,4 @@
-relationship 9ccf369e-232f-4280-9a2a-53d3f4290a04
-	joinOnDateBehavior: datePartOnly
-	fromColumn: Dim_Fecha.ID_Fecha
-	toColumn: LocalDateTable_bde6647c-e106-4685-bc96-466342e08f23.Date
 
-relationship ad27e57d-b12a-493c-b40a-6095e0ab55d7
-	joinOnDateBehavior: datePartOnly
-	fromColumn: Dim_Fecha.Fecha
-	toColumn: LocalDateTable_c9ea6214-5d24-4355-9d39-0184c25ac9f0.Date
-
-relationship b379c270-1e83-4f57-adbb-2d4338f669c3
-	joinOnDateBehavior: datePartOnly
-	fromColumn: Fact_Vacantes.ID_Fecha
-	toColumn: LocalDateTable_27b4f582-1d40-45e5-ae8b-7566eff08342.Date
 
 relationship AutoDetected_859e46f5-12b0-4032-9a7a-adc4b068bfa7
 	fromColumn: Fact_Vacantes.ID_Cluster
