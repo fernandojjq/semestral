@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
-  "name": "v05SlicerPortal",
+  "name": "v09SlicerRegion",
   "position": {
     "x": 30,
-    "y": 190,
-    "z": 500,
+    "y": 355,
+    "z": 502,
     "width": 220,
     "height": 145,
-    "tabOrder": 4
+    "tabOrder": 8
   },
   "visual": {
     "visualType": "slicer",
@@ -23,11 +23,11 @@
                       "Entity": "Dim_Portales"
                     }
                   },
-                  "Property": "Nombre_Portal"
+                  "Property": "Region"
                 }
               },
-              "queryRef": "Dim_Portales.Nombre_Portal",
-              "nativeQueryRef": "Nombre_Portal"
+              "queryRef": "Dim_Portales.Region",
+              "nativeQueryRef": "Region"
             }
           ]
         }
